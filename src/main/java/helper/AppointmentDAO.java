@@ -13,7 +13,8 @@ public class AppointmentDAO {
         Query.querySQL(queryStmt);
         ResultSet result = Query.getResult();
         result.next();
+        int numOfAppts = result.getInt(1);
         JDBC.closeConnection();
-        return result.getInt(1);
+        return numOfAppts;
     }
 }
