@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="632.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.c195project.c195project.controller.CustomerPage">
+   <children>
+      <AnchorPane layoutX="18.0" layoutY="71.0" prefHeight="258.0" prefWidth="593.0" style="-fx-border-color: black; -fx-background-color: light gray;">
+         <children>
+            <Button fx:id="customerAddButton" layoutX="392.0" layoutY="222.0" mnemonicParsing="false" onAction="#onAddClick" text="Add" />
+            <Button fx:id="updateCustomerButton" layoutX="444.0" layoutY="222.0" mnemonicParsing="false" onAction="#onUpdateButtonClick" text="Update" />
+            <Button fx:id="deleteCustomerButton" layoutX="516.0" layoutY="222.0" mnemonicParsing="false" onAction="#onCustomerDeleteButtonClick" text="Delete" />
+            <TableView fx:id="customerTableView" layoutX="31.0" layoutY="15.0" prefHeight="196.0" prefWidth="531.0">
+              <columns>
+                <TableColumn fx:id="IdCol" prefWidth="30.0" text="ID" >
+                  <cellValueFactory>
+                      <PropertyValueFactory property="id"/>
+                  </cellValueFactory>
+                </TableColumn>
+                  <TableColumn fx:id="nameCol" prefWidth="120.0" text="Name">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="name"/>
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="addressCol" prefWidth="120.0" text="Address">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="address"/>
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="postalCodeCol" prefWidth="80.0" text="Post Code">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="postalCode"/>
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="phoneCol" prefWidth="120.0" text="Phone">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="phoneNumber"/>
+                      </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn fx:id="divIdCol" prefWidth="60.0" text="Div ID">
+                      <cellValueFactory>
+                          <PropertyValueFactory property="divisionId"/>
+                      </cellValueFactory>
+                  </TableColumn>
+              </columns>
+            </TableView>
+            <Button fx:id="schedulerButton" layoutX="28.0" layoutY="222.0" mnemonicParsing="false" onAction="#onSchedulerButtonClick" text="Scheduler" />
+         </children>
+      </AnchorPane>
+      <Label layoutX="256.0" layoutY="30.0" text="Customers">
+         <font>
+            <Font name="Arial Black" size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="logoutButton" layoutX="555.0" layoutY="337.0" mnemonicParsing="false" onAction="#onLogoutClick" text="Logout" />
+   </children>
+</AnchorPane>
