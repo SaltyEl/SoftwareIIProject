@@ -19,52 +19,52 @@
                <columns>
                   <TableColumn fx:id="apptIDColumn" prefWidth="30.0" text="ID">
                      <cellValueFactory>
-                        <PropertyValueFactory property="id" />
+                        <PropertyValueFactory property="id"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="titleCol" prefWidth="120.0" text="Title">
                      <cellValueFactory>
-                        <PropertyValueFactory property="name" />
+                        <PropertyValueFactory property="title"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="descriptionCol" prefWidth="120.0" text="Description">
                      <cellValueFactory>
-                        <PropertyValueFactory property="address" />
+                        <PropertyValueFactory property="description"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="locationCol" prefWidth="80.0" text="Location">
                      <cellValueFactory>
-                        <PropertyValueFactory property="postalCode" />
+                        <PropertyValueFactory property="location"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="typeCol" prefWidth="120.0" text="Type">
                      <cellValueFactory>
-                        <PropertyValueFactory property="phoneNumber" />
+                        <PropertyValueFactory property="type"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="startCol" prefWidth="60.0" text="Start">
                      <cellValueFactory>
-                        <PropertyValueFactory property="divisionId" />
+                        <PropertyValueFactory property="startDateTime"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="endCol" prefWidth="60.0" text="End">
                      <cellValueFactory>
-                        <PropertyValueFactory property="divisionId" />
+                        <PropertyValueFactory property="endDateTime"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="customerIdCol" prefWidth="76.0" text="Customer ID">
                      <cellValueFactory>
-                        <PropertyValueFactory property="divisionId" />
+                        <PropertyValueFactory property="customerID"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="userIDCol" prefWidth="58.0" text="User ID">
                      <cellValueFactory>
-                        <PropertyValueFactory property="divisionId" />
+                        <PropertyValueFactory property="userID"/>
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="contactCol" prefWidth="79.0" text="Contact">
                      <cellValueFactory>
-                        <PropertyValueFactory property="divisionId" />
+                        <PropertyValueFactory property="contactID"/>
                      </cellValueFactory>
                   </TableColumn>
                </columns>
