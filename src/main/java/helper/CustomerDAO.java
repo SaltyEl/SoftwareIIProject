@@ -100,8 +100,12 @@ public static void updateCustomer(Customer customer) throws SQLException {
     JDBC.closeConnection();
 }
 
-public static void deleteCustomer(){
-
+public static void deleteCustomer(Customer customer) throws SQLException {
+    String deleteStatement = "DELETE FROM " + TABLE_CUSTOMERS + " WHERE " + COLUMN_ID
+            + " = " + customer.getId();
+    JDBC.openConnection();
+    Query.querySQL(deleteStatement);
+    JDBC.closeConnection();
 }
 
 }

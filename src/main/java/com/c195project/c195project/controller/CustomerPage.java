@@ -8,12 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerPage implements Initializable {
@@ -27,6 +26,7 @@ public class CustomerPage implements Initializable {
     public TableColumn<Customer, String> phoneCol;
     public TableColumn<Customer, String> postalCodeCol;
     public Button customerAddButton;
+    public Button schedulerButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -52,7 +52,9 @@ public class CustomerPage implements Initializable {
         }
     }
 
-    public void onSchedulerButtonClick(ActionEvent actionEvent) {
+    public void onSchedulerButtonClick(ActionEvent actionEvent) throws IOException {
+        HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
+                CustomerPage.class, schedulerButton, 900, 402);
     }
 
     public void onLogoutClick (ActionEvent actionEvent) throws IOException {
@@ -62,6 +64,9 @@ public class CustomerPage implements Initializable {
 
     public void onCustomerDeleteButtonClick(ActionEvent actionEvent) throws Exception{
         try {
+            if(customerTableView.getSelectionModel().getSelectedItem() == null){
+                throw new Exception("No customer selected");
+            }
             Customer customer = customerTableView.getSelectionModel().getSelectedItem();
             int numAppts = AppointmentDAO.numOfCustomerAppointments(customer);
             if(numAppts > 0){
@@ -74,7 +79,15 @@ public class CustomerPage implements Initializable {
                 }
             }
             else {
-                System.out.println("Client does not have appt.");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this customer?");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    CustomerDAO.deleteCustomer(customer);
+                    Task<ObservableList<Customer>> task = new GetAllCustomersTask();
+                    customerTableView.itemsProperty().bind(task.valueProperty());
+                    new Thread(task).start();
+                }
             }
         }catch(Exception e){
             HelperFunctions.showError("Error", e.getMessage());

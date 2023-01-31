@@ -1,6 +1,8 @@
 package helper;
 
+import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Customer;
+import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,5 +18,9 @@ public class AppointmentDAO {
         int numOfAppts = result.getInt(1);
         JDBC.closeConnection();
         return numOfAppts;
+    }
+
+    public static ObservableList<Appointment> getAppointmentList(){
+
     }
 }

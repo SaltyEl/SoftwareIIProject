@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,7 @@ public class AddUpdateCustomer implements Initializable {
                 Country countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
                 ObservableList<Division> divisionList = HelperFunctions.filterDivisionByCountry(countrySelected);
                 divisionComboBox.setItems(divisionList);
+
                 int index = -1;
                 for(int i=0; i < divisionList.size();i++){
                     if(customerToUpdate.getDivisionId() == divisionList.get(i).getId()){
