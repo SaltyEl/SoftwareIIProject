@@ -47,18 +47,4 @@ public class DivisionDAO {
         }
         return null;
     }
-
-    //Consider deleting this method.
-    /*public static Division getDivisionByCustomerID(int customerId) throws SQLException {
-        String sqlstmt = "SELECT Division FROM client_schedule.customers, client_schedule.first_level_divisions" +
-                " WHERE customers.division_id = first_level_divisions.division_id" +
-                " AND customers.customer_id = " + customerId;
-        JDBC.openConnection();
-        Query.querySQL(sqlstmt);
-        ResultSet result = Query.getResult();
-        result.next();
-        Division division = new Division(result.getString("division"));
-        System.out.println(division);
-        return division;
-    }*/
 }

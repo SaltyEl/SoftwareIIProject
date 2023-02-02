@@ -1,16 +1,22 @@
 package com.c195project.c195project.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Appointment {
     private int id;
     private String title;
     private String description;
     private String location;
     private String type;
-    private String startDateTime;
-    private String endDateTime;
+    private LocalDateTime startDateTime;
+    private String formattedStartTime;
+    private LocalDateTime endDateTime;
+    private String formattedEndTime;
     private int customerID;
     private int userID;
     private int contactID;
+    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
 
     public int getId() {
         return id;
@@ -52,20 +58,29 @@ public class Appointment {
         this.type = type;
     }
 
-    public String getStartDateTime() {
+    public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(String startDateTime) {
+    public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
+        this.formattedStartTime = startDateTime.format(dtf);
     }
 
-    public String getEndDateTime() {
+    public LocalDateTime getEndDateTime() {
         return endDateTime;
     }
+    public String getFormattedStartTime(){
+        return formattedStartTime;
+    }
 
-    public void setEndDateTime(String endDateTime) {
+    public String getFormattedEndTime(){
+        return formattedEndTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
+        this.formattedEndTime = endDateTime.format(dtf);
     }
 
     public int getCustomerID() {

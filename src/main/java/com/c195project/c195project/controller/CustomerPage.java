@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class CustomerPage implements Initializable {
 
@@ -27,6 +28,7 @@ public class CustomerPage implements Initializable {
     public TableColumn<Customer, String> postalCodeCol;
     public Button customerAddButton;
     public Button schedulerButton;
+    public static Boolean customerIsSelected;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -53,8 +55,11 @@ public class CustomerPage implements Initializable {
     }
 
     public void onSchedulerButtonClick(ActionEvent actionEvent) throws IOException {
+        Scheduler.customerSelected = customerTableView.getSelectionModel().getSelectedItem();
+        Predicate<Customer> selectionIsEmpty = (customer) -> customer == null;
+        customerIsSelected = selectionIsEmpty.test(Scheduler.customerSelected);
         HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
-                CustomerPage.class, schedulerButton, 900, 402);
+                CustomerPage.class, schedulerButton, 1200, 400);
     }
 
     public void onLogoutClick (ActionEvent actionEvent) throws IOException {

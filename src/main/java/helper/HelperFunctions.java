@@ -1,5 +1,6 @@
 package helper;
 
+import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Country;
 import com.c195project.c195project.model.Division;
 import javafx.collections.FXCollections;
@@ -11,8 +12,16 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.stream.Collectors;
+
+import static helper.AppointmentDAO.getAppointmentList;
 
 public class HelperFunctions {
 
@@ -45,5 +54,16 @@ public class HelperFunctions {
                         .sorted(Comparator.comparing(Division::getDivisionName))
                         .collect(Collectors.toCollection(FXCollections::observableArrayList));
         return filteredList;
+    }
+
+   public static LocalDateTime offsetDBTimeConversion(LocalDateTime timeToConvert){
+       return timeToConvert.minusHours(1);
+    }
+
+    public static LocalDateTime convertUTCToLocal(LocalDateTime timeToConvert){
+        ZoneId localZone = ZoneId.systemDefault();
+        ZoneId dbZone = ZoneId.of("Europe/London");
+        LocalDateTime convertedTime = timeToConvert.atZone(localZone).withZoneSameInstant(dbZone).toLocalDateTime();
+        return convertedTime;
     }
 }
