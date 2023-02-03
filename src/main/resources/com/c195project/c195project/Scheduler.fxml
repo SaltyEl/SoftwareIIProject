@@ -2,20 +2,23 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.c195project.c195project.controller.Scheduler">
    <children>
-      <AnchorPane layoutX="50.0" layoutY="71.0" prefHeight="258.0" prefWidth="1100.0" style="-fx-border-color: black; -fx-background-color: light gray;">
+      <AnchorPane layoutX="50.0" layoutY="78.0" prefHeight="258.0" prefWidth="1100.0" style="-fx-border-color: black; -fx-background-color: light gray;">
          <children>
             <Button fx:id="appointmentAddButton" layoutX="853.0" layoutY="213.0" mnemonicParsing="false" onAction="#onAppointmentAddButtonClick" text="Add" />
             <Button fx:id="updateAppointmentButton" layoutX="908.0" layoutY="213.0" mnemonicParsing="false" onAction="#onAppointmentUpdateButtonClick" text="Update" />
             <Button fx:id="deleteAppointmentButton" layoutX="979.0" layoutY="213.0" mnemonicParsing="false" onAction="#onAppointmentDeleteButtonClick" text="Delete" />
-            <TableView fx:id="appointmentTableView" layoutX="52.0" layoutY="14.0" prefHeight="196.0" prefWidth="980.0">
+            <TableView fx:id="appointmentTableView" layoutX="60.0" layoutY="14.0" prefHeight="196.0" prefWidth="980.0">
                <columns>
                   <TableColumn fx:id="apptIDColumn" minWidth="30.0" prefWidth="30.0" text="ID">
                      <cellValueFactory>
@@ -44,7 +47,7 @@
                   </TableColumn>
                   <TableColumn fx:id="startCol" minWidth="135.0" prefWidth="135.0" text="Start">
                      <cellValueFactory>
-                        <PropertyValueFactory property="formattedStartTime"/>
+                        <PropertyValueFactory property="formattedStartTime" />
                      </cellValueFactory>
                   </TableColumn>
                   <TableColumn fx:id="endCol" minWidth="135.0" prefWidth="135.0" text="End">
@@ -69,7 +72,7 @@
                   </TableColumn>
                </columns>
             </TableView>
-            <Label fx:id="adjustableLabel" layoutX="52.0" layoutY="218.0" text="Filler" />
+            <Label fx:id="adjustableLabel" layoutX="60.0" layoutY="218.0" text="Filler" />
          </children>
       </AnchorPane>
       <Label fx:id="titleLabel" layoutX="524.0" layoutY="14.0" text="Appointments">
@@ -77,6 +80,18 @@
             <Font name="Arial Black" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="backButton" layoutX="1105.0" layoutY="337.0" mnemonicParsing="false" onAction="#onBackClick" text="Back" />
+      <Button fx:id="backButton" layoutX="1105.0" layoutY="344.0" mnemonicParsing="false" onAction="#onBackClick" text="Back" />
+      <Label layoutX="50.0" layoutY="6.0" text="Filter Appointments By:" />
+      <VBox layoutX="187.0" layoutY="7.0" prefHeight="73.0" prefWidth="169.0" spacing="5.0">
+         <children>
+            <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" onAction="#onWeekClick" text="Week">
+               <toggleGroup>
+                  <ToggleGroup fx:id="appointmentFilter" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="monthRadioButton" mnemonicParsing="false" onAction="#onMonthClick" text="Month" toggleGroup="$appointmentFilter" />
+            <RadioButton mnemonicParsing="false" onAction="#onAllClicked" selected="true" text="Show All" toggleGroup="$appointmentFilter" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

@@ -22,6 +22,11 @@ public class Appointment {
         this.id = 0;
     }
 
+    @Override
+    public String toString(){
+        return String.valueOf(getId());
+    }
+
     public int getId() {
         return id;
     }

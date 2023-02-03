@@ -28,7 +28,7 @@ public class CustomerPage implements Initializable {
     public TableColumn<Customer, String> postalCodeCol;
     public Button customerAddButton;
     public Button schedulerButton;
-    public static Boolean customerIsSelected;
+    public static Boolean customerIsNotSelected;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,7 +57,7 @@ public class CustomerPage implements Initializable {
     public void onSchedulerButtonClick(ActionEvent actionEvent) throws IOException {
         Scheduler.customerSelected = customerTableView.getSelectionModel().getSelectedItem();
         Predicate<Customer> selectionIsEmpty = (customer) -> customer == null;
-        customerIsSelected = selectionIsEmpty.test(Scheduler.customerSelected);
+        customerIsNotSelected = selectionIsEmpty.test(Scheduler.customerSelected);
         HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
                 CustomerPage.class, schedulerButton, 1200, 400);
     }

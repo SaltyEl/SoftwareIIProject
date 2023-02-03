@@ -3,10 +3,9 @@ package com.c195project.c195project.controller;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Customer;
 import helper.AppointmentDAO;
-import helper.CustomerDAO;
 import helper.HelperFunctions;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -15,10 +14,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Scheduler implements Initializable {
     public Button appointmentAddButton;
@@ -29,11 +29,13 @@ public class Scheduler implements Initializable {
     public Button backButton;
     public Label adjustableLabel;
     public TableColumn startCol;
+    public RadioButton weekRadioButton;
+    public RadioButton monthRadioButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if(CustomerPage.customerIsSelected){
-            adjustableLabel.setText("All Appointments");
+        if(CustomerPage.customerIsNotSelected){
+            adjustableLabel.setText("All Customer Appointments");
             try {
                 appointmentTableView.setItems(AppointmentDAO.getAppointmentList());
                 
@@ -81,6 +83,12 @@ public class Scheduler implements Initializable {
 
                 ObservableList<Appointment> appointmentList = AppointmentDAO.getAppointmentList();
                 appointmentTableView.setItems(appointmentList);
+
+                Alert deleteInfo = new Alert(Alert.AlertType.INFORMATION);
+                deleteInfo.setTitle("Appointment Deleted");
+                deleteInfo.setContentText("Appointment Deleted -\n" + "ID: " + appointment.getId() +
+                       "\nType: " + appointment.getType());
+                deleteInfo.showAndWait();
             }
         }
         catch(Exception e){
@@ -93,4 +101,64 @@ public class Scheduler implements Initializable {
                 LoginPage.class, backButton, 632, 402);
     }
 
+    public void onWeekClick(ActionEvent actionEvent) throws SQLException {
+        monthRadioButton.setText("Month");
+        weekRadioButton.setText("Week - Next 7 Days");
+        filterByTime(8);
+    }
+
+    public void onMonthClick(ActionEvent actionEvent) throws SQLException {
+        weekRadioButton.setText("Week");
+        monthRadioButton.setText("Month - Next 30 Days");
+        filterByTime(31);
+    }
+
+    private void filterByTime(int addDays) throws SQLException {
+        LocalDate startDateMinusOne = LocalDate.now().minusDays(1);
+        LocalDate endDatePlusOne = LocalDate.now().plusDays(addDays);
+
+        System.out.println(startDateMinusOne + "\n" + endDatePlusOne);
+
+        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+        if(CustomerPage.customerIsNotSelected){
+            appointmentList = AppointmentDAO.getAppointmentList();
+        }
+        else{
+            appointmentList = AppointmentDAO.getApptListByCustomerID(customerSelected);
+        }
+
+        Predicate<Appointment> isBeforeEndAndAfterStart = a -> a.getStartDateTime().toLocalDate().isBefore(endDatePlusOne)
+                && a.getStartDateTime().toLocalDate().isAfter(startDateMinusOne);
+
+        ObservableList<Appointment> filteredList = appointmentList.stream()
+                .filter(isBeforeEndAndAfterStart)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+        System.out.println(filteredList);
+
+        appointmentTableView.setItems(filteredList);
+    }
+
+    public void onAllClicked(ActionEvent actionEvent) {
+        weekRadioButton.setText("Week");
+        monthRadioButton.setText("Month");
+        if(CustomerPage.customerIsNotSelected){
+            adjustableLabel.setText("All Customer Appointments");
+            try {
+                appointmentTableView.setItems(AppointmentDAO.getAppointmentList());
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else{
+            adjustableLabel.setText("Appointments for: " + customerSelected.getName());
+            try {
+                appointmentTableView.setItems(AppointmentDAO.getApptListByCustomerID(customerSelected));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
 }

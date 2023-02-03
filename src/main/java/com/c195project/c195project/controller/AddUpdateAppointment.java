@@ -51,6 +51,7 @@ public class AddUpdateAppointment implements Initializable {
         }
         else{
             AddUpdateApptTitleLbl.setText("Update Appointment");
+            appointmentIDTxt.setText(String.valueOf(appointmentSelected.getId()));
             addTitleTxt.setText(appointmentSelected.getTitle());
             addDescriptionTxt.setText(appointmentSelected.getDescription());
             addTypeTxt.setText(appointmentSelected.getType());
