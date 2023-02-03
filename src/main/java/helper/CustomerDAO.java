@@ -52,6 +52,22 @@ public static ObservableList<Customer> getCustomerList() throws SQLException{
     return null;
 }
 
+public static Boolean containsCustomerID(Integer customerID) throws SQLException {
+    String stmt = "SELECT customer_id FROM client_schedule.customers ORDER BY customer_id";
+    JDBC.openConnection();
+    Query.querySQL(stmt);
+    ResultSet result = Query.getResult();
+    while(result.next()){
+        Integer integer = result.getInt(1);
+        if(integer.equals(customerID)){
+            JDBC.closeConnection();
+            return true;
+        }
+    }
+    JDBC.closeConnection();
+    return false;
+}
+
 public static int findLastCustomerId(){
     JDBC.openConnection();
     try{

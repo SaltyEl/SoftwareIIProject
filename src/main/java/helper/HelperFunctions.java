@@ -13,10 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -56,14 +53,26 @@ public class HelperFunctions {
         return filteredList;
     }
 
-   public static LocalDateTime offsetDBTimeConversion(LocalDateTime timeToConvert){
-       return timeToConvert.minusHours(1);
-    }
-
-    public static LocalDateTime convertUTCToLocal(LocalDateTime timeToConvert){
+    public static LocalDateTime convertLocalToUTC(LocalDateTime timeToConvert){
         ZoneId localZone = ZoneId.systemDefault();
-        ZoneId dbZone = ZoneId.of("Europe/London");
-        LocalDateTime convertedTime = timeToConvert.atZone(localZone).withZoneSameInstant(dbZone).toLocalDateTime();
-        return convertedTime;
+        ZoneId newYork = ZoneId.of("America/New_York");
+        ZoneId phoenix = ZoneId.of("America/Phoenix");
+        ZoneId montreal = ZoneId.of("America/Montreal");
+        ZoneId UTC = ZoneId.of("UTC");
+        if(localZone.equals(newYork)){
+            ZonedDateTime zonedTime = timeToConvert.atZone(newYork);
+            return zonedTime.withZoneSameInstant(UTC).toLocalDateTime();
+        }
+        else if(localZone.equals(phoenix)){
+            ZonedDateTime zonedTime = timeToConvert.atZone(phoenix);
+            return zonedTime.withZoneSameInstant(UTC).toLocalDateTime();
+        }
+        else if(localZone.equals(montreal)){
+            ZonedDateTime zonedTime = timeToConvert.atZone(montreal);
+            return zonedTime.withZoneSameInstant(UTC).toLocalDateTime();
+        }
+
+        return null;
+
     }
 }

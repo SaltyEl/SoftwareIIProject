@@ -44,4 +44,20 @@ public class UserDAO {
      return null;
  }
 
+    public static Boolean containsUserId(Integer userID) throws SQLException {
+        String stmt = "SELECT user_id FROM client_schedule.users ORDER BY user_id";
+        JDBC.openConnection();
+        Query.querySQL(stmt);
+        ResultSet result = Query.getResult();
+        while(result.next()){
+            Integer integer = result.getInt(1);
+            if(integer.equals(userID)){
+                JDBC.closeConnection();
+                return true;
+            }
+        }
+        JDBC.closeConnection();
+        return false;
+    }
+
 }

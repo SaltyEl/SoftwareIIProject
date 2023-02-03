@@ -44,9 +44,9 @@ public class AppointmentDAO {
             nextAppointment.setLocation(result.getString("Location"));
             nextAppointment.setType(result.getString("Type"));
             LocalDateTime startTime = result.getTimestamp("Start").toLocalDateTime();
-            nextAppointment.setStartDateTime(HelperFunctions.offsetDBTimeConversion(startTime));
+            nextAppointment.setStartDateTime(startTime);
             LocalDateTime endTime = result.getTimestamp("End").toLocalDateTime();
-            nextAppointment.setEndDateTime(HelperFunctions.offsetDBTimeConversion(endTime));
+            nextAppointment.setEndDateTime(endTime);
             nextAppointment.setContactID(result.getInt("Contact_ID"));
             nextAppointment.setUserID(result.getInt("User_ID"));
             nextAppointment.setCustomerID(result.getInt("Customer_ID"));
@@ -76,9 +76,28 @@ public class AppointmentDAO {
                 + LoginPage.currentUser + "', NOW(), '" + LoginPage.currentUser + "', " +
                 appointment.getCustomerID() + ", " + appointment.getUserID() + ", " +
                 appointment.getContactID() + ")";
-        System.out.println(insertStmt);
         JDBC.openConnection();
         Query.querySQL(insertStmt);
+        JDBC.closeConnection();
+    }
+
+    public static void updateAppointment(Appointment appointment) throws SQLException {
+        String updateStmt = "UPDATE " + TABLE_APPOINTMENTS + " SET title='" + appointment.getTitle()
+                + "', description='" + appointment.getDescription() +"', location='" + appointment.getLocation()
+                + "', type='" + appointment.getType() + "', start='" + Timestamp.valueOf(appointment.getStartDateTime())
+                + "', end='" + Timestamp.valueOf(appointment.getEndDateTime()) + "', last_update=NOW(), last_updated_by='"
+                + LoginPage.currentUser + "', customer_id=" + appointment.getCustomerID() + ", user_id="
+                + appointment.getUserID() + ", contact_id=" + appointment.getContactID()
+                +" WHERE appointment_id=" + appointment.getId();
+        System.out.println(updateStmt);
+        JDBC.openConnection();
+        Query.querySQL(updateStmt);
+        JDBC.closeConnection();
+    }
+    public static void deleteAppointment(int id) throws SQLException {
+        String deleteStatement = "DELETE FROM " + TABLE_APPOINTMENTS + " WHERE appointment_id = " + id;
+        JDBC.openConnection();
+        Query.querySQL(deleteStatement);
         JDBC.closeConnection();
     }
     public static int findLastAppointmentID() {

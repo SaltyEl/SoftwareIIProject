@@ -18,6 +18,10 @@ public class Appointment {
     private int contactID;
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
 
+    public Appointment() {
+        this.id = 0;
+    }
+
     public int getId() {
         return id;
     }
