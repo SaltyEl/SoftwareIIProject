@@ -3,26 +3,19 @@ package com.c195project.c195project.controller;
 import com.c195project.c195project.model.Country;
 import com.c195project.c195project.model.Customer;
 import com.c195project.c195project.model.Division;
-import helper.CountryDAO;
-import helper.CustomerDAO;
-import helper.DivisionDAO;
-import helper.HelperFunctions;
-import javafx.collections.FXCollections;
+import com.c195project.c195project.DAO.CountryDAO;
+import com.c195project.c195project.DAO.CustomerDAO;
+import com.c195project.c195project.DAO.DivisionDAO;
+import com.c195project.c195project.helpers.HelperFunctions;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class AddUpdateCustomer implements Initializable {
     public Button cancelButton;
@@ -97,7 +90,7 @@ public class AddUpdateCustomer implements Initializable {
                 }
                 CustomerDAO.insertCustomer(newCustomer);
                 HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                        LoginPage.class, addPartSaveBtn, 632, 402);
+                        LoginPage.class, addPartSaveBtn, 777, 402);
             }
             else{
                 if( divisionComboBox.getSelectionModel().isEmpty()){
@@ -114,7 +107,7 @@ public class AddUpdateCustomer implements Initializable {
                 }
                 CustomerDAO.updateCustomer(customerToUpdate);
                 HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                        LoginPage.class, cancelButton, 632, 402);
+                        LoginPage.class, cancelButton, 777, 402);
             }
         }catch(Exception e){
             HelperFunctions.showError("Error", e.getMessage());
@@ -123,7 +116,7 @@ public class AddUpdateCustomer implements Initializable {
 
     public void onCancelClick(ActionEvent actionEvent) throws IOException {
         HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                LoginPage.class, cancelButton, 632, 402);
+                LoginPage.class, cancelButton, 777, 402);
     }
 
     public void onComboBoxClick(ActionEvent actionEvent) throws SQLException {

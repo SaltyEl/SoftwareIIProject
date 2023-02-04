@@ -1,6 +1,8 @@
-package helper;
+package com.c195project.c195project.DAO;
 
 import com.c195project.c195project.model.Contact;
+import com.c195project.c195project.helpers.Query;
+import com.c195project.c195project.helpers.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

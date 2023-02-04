@@ -1,13 +1,12 @@
-package helper;
+package com.c195project.c195project.DAO;
 
 import com.c195project.c195project.controller.LoginPage;
+import com.c195project.c195project.helpers.JDBC;
+import com.c195project.c195project.helpers.Query;
 import com.c195project.c195project.model.User;
-import javafx.scene.control.Alert;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static helper.JDBC.connection;
 
 public class UserDAO {
 

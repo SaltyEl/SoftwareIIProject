@@ -1,6 +1,6 @@
-package helper;
+package com.c195project.c195project.helpers;
 
-import com.c195project.c195project.model.Appointment;
+import com.c195project.c195project.DAO.DivisionDAO;
 import com.c195project.c195project.model.Country;
 import com.c195project.c195project.model.Division;
 import javafx.collections.FXCollections;
@@ -12,13 +12,11 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.stream.Collectors;
-
-import static helper.AppointmentDAO.getAppointmentList;
 
 public class HelperFunctions {
 

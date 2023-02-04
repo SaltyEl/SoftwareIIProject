@@ -1,6 +1,8 @@
-package helper;
+package com.c195project.c195project.DAO;
 
 import com.c195project.c195project.model.Country;
+import com.c195project.c195project.helpers.JDBC;
+import com.c195project.c195project.helpers.Query;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -49,5 +51,25 @@ public class CountryDAO {
         int countryID = result.getInt("country_id");
         JDBC.closeConnection();
         return countryID;
+    }
+
+    public static String getCountryFromDivisionID(int divisionID) throws SQLException{
+        /*SELECT countries.country
+        FROM client_schedule.first_level_divisions, client_schedule.countries
+        WHERE first_level_divisions.country_id = countries.country_id
+        AND first_level_divisions.division_id = 1;*/
+
+        String sqlStmt = "SELECT countries.country " +
+                "FROM client_schedule.first_level_divisions, client_schedule.countries " +
+                "WHERE first_level_divisions.country_id = countries.country_id " +
+                "AND first_level_divisions.division_id =" + divisionID;
+
+        JDBC.openConnection();
+        Query.querySQL(sqlStmt);
+        ResultSet result = Query.getResult();
+        result.next();
+        String country = result.getString("country");
+        JDBC.closeConnection();
+        return country;
     }
 }

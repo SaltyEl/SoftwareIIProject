@@ -1,14 +1,13 @@
-package helper;
+package com.c195project.c195project.DAO;
 
-import com.c195project.c195project.model.Country;
 import com.c195project.c195project.model.Division;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.stream.Collectors;
+import com.c195project.c195project.helpers.Query;
+import com.c195project.c195project.helpers.JDBC;
 
 public class DivisionDAO {
 

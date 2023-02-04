@@ -1,15 +1,14 @@
-package helper;
+package com.c195project.c195project.DAO;
 
 import com.c195project.c195project.controller.LoginPage;
 import com.c195project.c195project.model.Customer;
+import com.c195project.c195project.helpers.JDBC;
+import com.c195project.c195project.helpers.Query;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CustomerDAO {
 
@@ -38,6 +37,7 @@ public static ObservableList<Customer> getCustomerList() throws SQLException{
             newCustomer.setPhoneNumber(result.getString(COLUMN_PHONE));
             newCustomer.setPostalCode(result.getString(COLUMN_POSTAL_CODE));
             newCustomer.setDivisionId(result.getInt(COLUMN_DIVISION_ID));
+            newCustomer.setCountry(newCustomer.getDivisionId());
             resultsList.add(newCustomer);
         }
         return resultsList;

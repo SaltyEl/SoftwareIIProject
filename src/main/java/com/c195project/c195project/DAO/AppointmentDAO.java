@@ -1,8 +1,10 @@
-package helper;
+package com.c195project.c195project.DAO;
 
 import com.c195project.c195project.controller.LoginPage;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Customer;
+import com.c195project.c195project.helpers.JDBC;
+import com.c195project.c195project.helpers.Query;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,9 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 public class AppointmentDAO {

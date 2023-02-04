@@ -1,9 +1,9 @@
 package com.c195project.c195project.controller;
 
 import com.c195project.c195project.model.Customer;
-import helper.AppointmentDAO;
-import helper.CustomerDAO;
-import helper.HelperFunctions;
+import com.c195project.c195project.DAO.AppointmentDAO;
+import com.c195project.c195project.DAO.CustomerDAO;
+import com.c195project.c195project.helpers.HelperFunctions;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;

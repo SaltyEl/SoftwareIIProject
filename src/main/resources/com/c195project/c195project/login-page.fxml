@@ -29,14 +29,14 @@
             <Label fx:id="PasswordLabel" text="Password" GridPane.rowIndex="1" />
             <TextField fx:id="usernameTxt" GridPane.columnIndex="1" />
             <PasswordField fx:id="passwordTxt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <Label fx:id="timeZoneTxt" prefHeight="34.0" prefWidth="121.0" text="Timezone">
+                  <Label fx:id="timeZoneTxt" prefHeight="34.0" prefWidth="126.0" text="Timezone">
                      <font>
                         <Font name="Papyrus Condensed" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#onLoginButtonClick" text="Login" />
+                  <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="26.0" prefWidth="82.0" text="Login" />
                </children>
             </HBox>
          </children>

@@ -1,9 +1,12 @@
 package com.c195project.c195project.controller;
 
+import com.c195project.c195project.DAO.AppointmentDAO;
+import com.c195project.c195project.DAO.ContactDAO;
+import com.c195project.c195project.DAO.CustomerDAO;
+import com.c195project.c195project.DAO.UserDAO;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Contact;
-import com.c195project.c195project.model.Customer;
-import helper.*;
+import com.c195project.c195project.helpers.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,7 +17,6 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;

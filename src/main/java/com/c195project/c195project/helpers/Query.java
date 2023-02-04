@@ -1,9 +1,8 @@
-package helper;
+package com.c195project.c195project.helpers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Locale;
 
 public class Query {
     private static String query;

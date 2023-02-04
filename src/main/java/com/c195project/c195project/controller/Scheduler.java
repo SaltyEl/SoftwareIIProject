@@ -2,8 +2,8 @@ package com.c195project.c195project.controller;
 
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Customer;
-import helper.AppointmentDAO;
-import helper.HelperFunctions;
+import com.c195project.c195project.DAO.AppointmentDAO;
+import com.c195project.c195project.helpers.HelperFunctions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
@@ -98,7 +97,7 @@ public class Scheduler implements Initializable {
 
     public void onBackClick(ActionEvent actionEvent) throws IOException {
         HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                LoginPage.class, backButton, 632, 402);
+                LoginPage.class, backButton, 777, 402);
     }
 
     public void onWeekClick(ActionEvent actionEvent) throws SQLException {

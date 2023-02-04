@@ -1,4 +1,4 @@
-package helper;
+package com.c195project.c195project.helpers;
 
 import javafx.application.Platform;
 

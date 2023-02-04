@@ -1,8 +1,10 @@
 package com.c195project.c195project.model;
 
+import com.c195project.c195project.DAO.CountryDAO;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
+
+import java.sql.SQLException;
 
 public class Customer {
     private SimpleIntegerProperty id;
@@ -11,6 +13,7 @@ public class Customer {
     private SimpleStringProperty postalCode;
     private SimpleStringProperty phoneNumber;
     private SimpleIntegerProperty divisionId;
+    private SimpleStringProperty country;
 
     public Customer() {
         this.id = new SimpleIntegerProperty();
@@ -19,6 +22,15 @@ public class Customer {
         this.postalCode = new SimpleStringProperty();
         this.phoneNumber = new SimpleStringProperty();
         this.divisionId = new SimpleIntegerProperty();
+        this.country = new SimpleStringProperty();
+    }
+
+    public String getCountry() {
+        return country.get();
+    }
+
+    public void setCountry(int divisionID) throws SQLException {
+        this.country.set(CountryDAO.getCountryFromDivisionID(getDivisionId()));
     }
 
     public int getId() {

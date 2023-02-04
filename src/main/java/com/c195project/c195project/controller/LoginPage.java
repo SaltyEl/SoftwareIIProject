@@ -1,14 +1,15 @@
 package com.c195project.c195project.controller;
 
 import com.c195project.c195project.model.User;
-import helper.HelperFunctions;
-import helper.UserDAO;
+import com.c195project.c195project.helpers.HelperFunctions;
+import com.c195project.c195project.DAO.UserDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
 import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -31,13 +32,15 @@ public class LoginPage implements Initializable {
         /*Locale french = Locale.CANADA_FRENCH;
         Locale.setDefault(french);*/
 
-        timeZoneTxt.setText(ZoneId.systemDefault().toString());
+
 
         Locale locale = Locale.getDefault();
+        timeZoneTxt.setText(ZoneId.systemDefault().toString());
         if(locale.getLanguage().equals("fr")){
             userNameLabel.setText(convertWordToFrenchCA("Username"));
             PasswordLabel.setText(convertWordToFrenchCA("Password"));
             loginBtn.setText(convertWordToFrenchCA("Login"));
+            timeZoneTxt.setText(ZoneId.systemDefault().getDisplayName(TextStyle.FULL, locale));
         }
     }
 
@@ -64,7 +67,7 @@ public class LoginPage implements Initializable {
                 if (password.equals(user.getPassword())){
                     currentUser = usernameTxt.getText();
                     HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                            LoginPage.class, loginBtn, 632, 402);
+                            LoginPage.class, loginBtn, 777, 402);
                 }else{
                     if(Locale.getDefault().getLanguage().equals("fr")) {
                         HelperFunctions.showError(convertWordToFrenchCA("Error"),
