@@ -13,11 +13,11 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class HelperFunctions {
@@ -67,26 +67,24 @@ public class HelperFunctions {
         return filteredList;
     }
 
-    public static LocalDateTime convertLocalToUTC(LocalDateTime timeToConvert){
+    public static LocalDateTime convertLocalTime(LocalDateTime timeToConvert, ZoneId zoneId){
         ZoneId localZone = ZoneId.systemDefault();
-        ZoneId newYork = ZoneId.of("America/New_York");
-        ZoneId phoenix = ZoneId.of("America/Phoenix");
-        ZoneId montreal = ZoneId.of("America/Montreal");
-        ZoneId UTC = ZoneId.of("UTC");
-        if(localZone.equals(newYork)){
-            ZonedDateTime zonedTime = timeToConvert.atZone(newYork);
-            return zonedTime.withZoneSameInstant(UTC).toLocalDateTime();
-        }
-        else if(localZone.equals(phoenix)){
-            ZonedDateTime zonedTime = timeToConvert.atZone(phoenix);
-            return zonedTime.withZoneSameInstant(UTC).toLocalDateTime();
-        }
-        else if(localZone.equals(montreal)){
-            ZonedDateTime zonedTime = timeToConvert.atZone(montreal);
-            return zonedTime.withZoneSameInstant(UTC).toLocalDateTime();
-        }
+        ZonedDateTime zonedTime = timeToConvert.atZone(localZone);
+        return zonedTime.withZoneSameInstant(zoneId).toLocalDateTime();
+    }
 
-        return null;
+    public static Boolean businessIsOpen(LocalDateTime startDateTime, LocalDateTime endDateTime){
+        ZoneId eastern = ZoneId.of("America/New_York");
+        LocalTime open = LocalTime.of(8, 0);
+        LocalTime close = LocalTime.of(22, 0);
+        LocalTime startTimeInEastern = convertLocalTime(startDateTime, eastern).toLocalTime();
+        LocalTime endTimeInEastern = convertLocalTime(endDateTime, eastern).toLocalTime();
 
+        Predicate<LocalTime> isDuringBusinessHours = (t -> (t.isAfter(open) && t.isBefore(close)) || (t.equals(open)) || (t.equals(close)));
+        BiPredicate<LocalDate, LocalDate> isNotOverNight = LocalDate::equals;
+
+        return (isDuringBusinessHours.test(startTimeInEastern)
+                && (isDuringBusinessHours.test(endTimeInEastern))
+                && (isNotOverNight.test(startDateTime.toLocalDate(), endDateTime.toLocalDate())));
     }
 }

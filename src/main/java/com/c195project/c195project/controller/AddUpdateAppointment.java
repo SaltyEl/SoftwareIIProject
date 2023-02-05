@@ -18,9 +18,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
+import java.util.function.BiPredicate;
 
 public class AddUpdateAppointment implements Initializable {
     public static Boolean addButtonClicked;
@@ -100,6 +103,8 @@ public class AddUpdateAppointment implements Initializable {
         }
         catch(DateTimeParseException dtpe){
             HelperFunctions.showError("Error", "Date and time must be filled out as prompted.");
+        } catch (Exception e) {
+            HelperFunctions.showError("Error", e.getMessage());
         }
     }
 
@@ -108,7 +113,7 @@ public class AddUpdateAppointment implements Initializable {
                 LoginPage.class, cancelButton, "Scheduler", 1200, 400);
     }
 
-    private Appointment createAppointmentFromUserInfo(Appointment appointment) throws SQLException, IOException {
+    private Appointment createAppointmentFromUserInfo(Appointment appointment) throws Exception {
         if(appointment.getId() == 0) {
             appointment.setId(AppointmentDAO.findLastAppointmentID() + 1);
         }
@@ -116,10 +121,21 @@ public class AddUpdateAppointment implements Initializable {
         appointment.setDescription(addDescriptionTxt.getText());
         appointment.setType(addTypeTxt.getText());
         appointment.setLocation(addLocationTxt.getText());
-        LocalDateTime timeEntered= LocalDateTime.parse(startDateTimeTxt.getText(), dtf);
-        appointment.setStartDateTime(HelperFunctions.convertLocalToUTC(timeEntered));
+
+        ZoneId UTC = ZoneId.of("UTC");
+        LocalDateTime startTimeEntered= LocalDateTime.parse(startDateTimeTxt.getText(), dtf);
         LocalDateTime endTimeEntered = LocalDateTime.parse(endDateTimeTxt.getText(), dtf);
-        appointment.setEndDateTime(HelperFunctions.convertLocalToUTC(endTimeEntered));
+        boolean withinBusinessHours = HelperFunctions.businessIsOpen(startTimeEntered, endTimeEntered);
+        if(!withinBusinessHours){
+            throw new Exception("This is not within business hours.");
+        }
+        BiPredicate<LocalTime, LocalTime> isStartBeforeEnd = LocalTime::isBefore;
+        if(!isStartBeforeEnd.test(startTimeEntered.toLocalTime(), endTimeEntered.toLocalTime())){
+            throw new Exception("End time must be after start time");
+        }
+        appointment.setStartDateTime(HelperFunctions.convertLocalTime(startTimeEntered, UTC));
+        appointment.setEndDateTime(HelperFunctions.convertLocalTime(endTimeEntered, UTC));
+
         Integer customerID = Integer.valueOf(customerIDTxt.getText());
         if(!CustomerDAO.containsCustomerID(customerID)){
             throw new IOException("This customer does not exist");

@@ -124,7 +124,8 @@ public class AppointmentDAO {
 
     public static void updateAppointmentTime(Appointment appointment) throws SQLException {
         String stmt = "UPDATE client_schedule.appointments SET start='" + Timestamp.valueOf(appointment.getStartDateTime())
-                + "', end='" + Timestamp.valueOf(appointment.getEndDateTime()) + "' WHERE appointment_id=" + appointment.getId();
+                + "', end='" + Timestamp.valueOf(appointment.getEndDateTime())  + "', last_update=NOW(), last_updated_by='"
+                + LoginPage.currentUser + "' WHERE appointment_id=" + appointment.getId();
 
         JDBC.openConnection();
         Query.querySQL(stmt);

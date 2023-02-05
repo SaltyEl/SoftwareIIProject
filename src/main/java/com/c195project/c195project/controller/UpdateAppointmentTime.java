@@ -10,13 +10,14 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
+import java.util.function.BiPredicate;
 
 public class UpdateAppointmentTime implements Initializable {
 
@@ -41,13 +42,24 @@ public class UpdateAppointmentTime implements Initializable {
             LocalDate endDate = endDateTime.toLocalDate();
 
             if (startTimeTextBox.getText().isEmpty() || endTimeTextBox.getText().isEmpty()) {
-                //throw new Exception("Please fill out times.");
+                throw new Exception("Please fill out times.");
             }
             LocalTime startTime = LocalTime.parse(startTimeTextBox.getText(), dtf);
             LocalTime endTime = LocalTime.parse(endTimeTextBox.getText(), dtf);
 
-            appointmentSelected.setStartDateTime(HelperFunctions.convertLocalToUTC(LocalDateTime.of(startDate, startTime)));
-            appointmentSelected.setEndDateTime(HelperFunctions.convertLocalToUTC(LocalDateTime.of(endDate, endTime)));
+            LocalDateTime adjustedStartDateTime = LocalDateTime.of(startDate, startTime);
+            LocalDateTime adjustedEndDateTime = LocalDateTime.of(endDate, endTime);
+            boolean withinBusinessHours = HelperFunctions.businessIsOpen(adjustedStartDateTime, adjustedEndDateTime);
+            if(!withinBusinessHours){
+                throw new Exception("This is not within business hours.");
+            }
+            BiPredicate<LocalTime, LocalTime> isStartBeforeEnd = LocalTime::isBefore;
+            if(!isStartBeforeEnd.test(adjustedStartDateTime.toLocalTime(), adjustedEndDateTime.toLocalTime())){
+                throw new Exception("End time must be after start time");
+            }
+            ZoneId UTC = ZoneId.of("UTC");
+            appointmentSelected.setStartDateTime(HelperFunctions.convertLocalTime(adjustedStartDateTime, UTC));
+            appointmentSelected.setEndDateTime(HelperFunctions.convertLocalTime(adjustedEndDateTime, UTC));
             AppointmentDAO.updateAppointmentTime(appointmentSelected);
             HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
                     UpdateAppointmentTime.class, backButton, "Scheduler", 1200, 400);
