@@ -40,7 +40,6 @@ public class LoginPage implements Initializable {
             userNameLabel.setText(convertWordToFrenchCA("Username"));
             PasswordLabel.setText(convertWordToFrenchCA("Password"));
             loginBtn.setText(convertWordToFrenchCA("Login"));
-            timeZoneTxt.setText(ZoneId.systemDefault().getDisplayName(TextStyle.FULL, locale));
         }
     }
 
@@ -67,7 +66,7 @@ public class LoginPage implements Initializable {
                 if (password.equals(user.getPassword())){
                     currentUser = usernameTxt.getText();
                     HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                            LoginPage.class, loginBtn, 777, 402);
+                            LoginPage.class, loginBtn, "Customer",777, 402);
                 }else{
                     if(Locale.getDefault().getLanguage().equals("fr")) {
                         HelperFunctions.showError(convertWordToFrenchCA("Error"),

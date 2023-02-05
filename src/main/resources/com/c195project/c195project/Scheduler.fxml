@@ -8,16 +8,14 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.c195project.c195project.controller.Scheduler">
    <children>
-      <AnchorPane layoutX="50.0" layoutY="78.0" prefHeight="258.0" prefWidth="1100.0" style="-fx-border-color: black; -fx-background-color: light gray;">
+      <AnchorPane layoutX="50.0" layoutY="80.0" prefHeight="258.0" prefWidth="1100.0" style="-fx-border-color: black; -fx-background-color: light gray;">
          <children>
-            <Button fx:id="appointmentAddButton" layoutX="853.0" layoutY="213.0" mnemonicParsing="false" onAction="#onAppointmentAddButtonClick" text="Add" />
-            <Button fx:id="updateAppointmentButton" layoutX="908.0" layoutY="213.0" mnemonicParsing="false" onAction="#onAppointmentUpdateButtonClick" text="Update" />
-            <Button fx:id="deleteAppointmentButton" layoutX="979.0" layoutY="213.0" mnemonicParsing="false" onAction="#onAppointmentDeleteButtonClick" text="Delete" />
             <TableView fx:id="appointmentTableView" layoutX="60.0" layoutY="14.0" prefHeight="196.0" prefWidth="980.0">
                <columns>
                   <TableColumn fx:id="apptIDColumn" minWidth="30.0" prefWidth="30.0" text="ID">
@@ -73,6 +71,14 @@
                </columns>
             </TableView>
             <Label fx:id="adjustableLabel" layoutX="60.0" layoutY="218.0" text="Filler" />
+            <HBox layoutX="682.0" layoutY="212.0" prefHeight="29.0" prefWidth="358.0" spacing="15.0">
+               <children>
+                  <Button fx:id="appointmentAddButton" mnemonicParsing="false" onAction="#onAppointmentAddButtonClick" text="Add" />
+                  <Button fx:id="updateTimeButton" mnemonicParsing="false" onAction="#onUpdateTimeClick" text="Update Time" />
+                  <Button fx:id="updateAppointmentButton" mnemonicParsing="false" onAction="#onAppointmentUpdateButtonClick" text="Update Appointment" />
+                  <Button fx:id="deleteAppointmentButton" mnemonicParsing="false" onAction="#onAppointmentDeleteButtonClick" text="Delete" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
       <Label fx:id="titleLabel" layoutX="524.0" layoutY="14.0" text="Appointments">

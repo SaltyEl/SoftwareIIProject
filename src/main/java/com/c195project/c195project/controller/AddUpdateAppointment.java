@@ -87,13 +87,13 @@ public class AddUpdateAppointment implements Initializable {
                 Appointment newAppointment = createAppointmentFromUserInfo(appointment);
                 AppointmentDAO.addAppointment(newAppointment);
                 HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
-                        AddUpdateAppointment.class, addApptSaveButton, 1200, 400);
+                        AddUpdateAppointment.class, addApptSaveButton, "Scheduler", 1200, 400);
             }
             else{
                 Appointment updatedAppointment = createAppointmentFromUserInfo(appointmentSelected);
                 AppointmentDAO.updateAppointment(updatedAppointment);
                 HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
-                        AddUpdateAppointment.class, addApptSaveButton, 1200, 400);
+                        AddUpdateAppointment.class, addApptSaveButton, "Scheduler", 1200, 400);
             }
         } catch (IOException | SQLException e) {
             HelperFunctions.showError("Error", e.getMessage());
@@ -105,7 +105,7 @@ public class AddUpdateAppointment implements Initializable {
 
         public void onCancelClick(ActionEvent actionEvent) throws IOException {
         HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
-                LoginPage.class, cancelButton, 1200, 400);
+                LoginPage.class, cancelButton, "Scheduler", 1200, 400);
     }
 
     private Appointment createAppointmentFromUserInfo(Appointment appointment) throws SQLException, IOException {

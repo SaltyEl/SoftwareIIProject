@@ -1,5 +1,6 @@
 package com.c195project.c195project.controller;
 
+import com.c195project.c195project.Main;
 import com.c195project.c195project.model.Customer;
 import com.c195project.c195project.DAO.AppointmentDAO;
 import com.c195project.c195project.DAO.CustomerDAO;
@@ -7,11 +8,14 @@ import com.c195project.c195project.helpers.HelperFunctions;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
@@ -40,7 +44,7 @@ public class CustomerPage implements Initializable {
     public void onAddClick(ActionEvent actionEvent) throws IOException {
         AddUpdateCustomer.addButtonClicked = true;
         HelperFunctions.windowLoader("/com/c195project/c195project/Add-Update-Customer.fxml",
-                LoginPage.class, customerAddButton, 600, 600);
+                LoginPage.class, customerAddButton, "Add", 600, 600);
     }
 
     public void onUpdateButtonClick(ActionEvent actionEvent) throws IOException {
@@ -48,7 +52,7 @@ public class CustomerPage implements Initializable {
             AddUpdateCustomer.addButtonClicked = false;
             AddUpdateCustomer.customerToUpdate = customerTableView.getSelectionModel().getSelectedItem();
             HelperFunctions.windowLoader("/com/c195project/c195project/Add-Update-Customer.fxml",
-                    LoginPage.class, customerAddButton, 600, 600);
+                    LoginPage.class, customerAddButton, "Update", 600, 600);
         }catch(IOException e){
             HelperFunctions.showError("No selection", "Must select a customer to update.");
         }
@@ -59,12 +63,12 @@ public class CustomerPage implements Initializable {
         Predicate<Customer> selectionIsEmpty = (customer) -> customer == null;
         customerIsNotSelected = selectionIsEmpty.test(Scheduler.customerSelected);
         HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
-                CustomerPage.class, schedulerButton, 1200, 400);
+                CustomerPage.class, schedulerButton, "Scheduler", 1200, 400);
     }
 
     public void onLogoutClick (ActionEvent actionEvent) throws IOException {
-        HelperFunctions.windowLoader("/com/c195project/c195project/login-page.fxml",
-                CustomerPage.class, logoutButton,409, 235);
+        HelperFunctions.frenchWindowLoader("/com/c195project/c195project/login-page.fxml",
+                CustomerPage.class, logoutButton, "Login", 409, 235);
     }
 
     public void onCustomerDeleteButtonClick(ActionEvent actionEvent) throws Exception{

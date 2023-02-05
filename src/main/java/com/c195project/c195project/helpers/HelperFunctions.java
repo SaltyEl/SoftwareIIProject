@@ -1,6 +1,7 @@
 package com.c195project.c195project.helpers;
 
 import com.c195project.c195project.DAO.DivisionDAO;
+import com.c195project.c195project.controller.LoginPage;
 import com.c195project.c195project.model.Country;
 import com.c195project.c195project.model.Division;
 import javafx.collections.FXCollections;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class HelperFunctions {
@@ -33,10 +35,24 @@ public class HelperFunctions {
         alert.showAndWait();
     }
 
-    public static void windowLoader(String fxmlDoc, Class classname, Button buttonClicked, double width, double height) throws IOException {
+    public static void windowLoader(String fxmlDoc, Class classname, Button buttonClicked, String title, double width, double height) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(classname.getResource(fxmlDoc));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         Stage stage = (Stage) buttonClicked.getScene().getWindow();
+        stage.setTitle(title);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void frenchWindowLoader(String fxmlDoc, Class classname, Button buttonClicked, String title, double width, double height) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(classname.getResource(fxmlDoc));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        Stage stage = (Stage) buttonClicked.getScene().getWindow();
+        if(Locale.getDefault().getLanguage().equals("fr")) {
+            stage.setTitle(LoginPage.convertWordToFrenchCA("Login"));
+        }else{
+            stage.setTitle("Login");
+        }
         stage.setScene(scene);
         stage.show();
     }

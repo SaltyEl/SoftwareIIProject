@@ -90,7 +90,7 @@ public class AddUpdateCustomer implements Initializable {
                 }
                 CustomerDAO.insertCustomer(newCustomer);
                 HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                        LoginPage.class, addPartSaveBtn, 777, 402);
+                        LoginPage.class, addPartSaveBtn, "Customer", 777, 402);
             }
             else{
                 if( divisionComboBox.getSelectionModel().isEmpty()){
@@ -107,7 +107,7 @@ public class AddUpdateCustomer implements Initializable {
                 }
                 CustomerDAO.updateCustomer(customerToUpdate);
                 HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                        LoginPage.class, cancelButton, 777, 402);
+                        LoginPage.class, cancelButton, "Customer", 777, 402);
             }
         }catch(Exception e){
             HelperFunctions.showError("Error", e.getMessage());
@@ -116,7 +116,7 @@ public class AddUpdateCustomer implements Initializable {
 
     public void onCancelClick(ActionEvent actionEvent) throws IOException {
         HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                LoginPage.class, cancelButton, 777, 402);
+                LoginPage.class, cancelButton, "Customer", 777, 402);
     }
 
     public void onComboBoxClick(ActionEvent actionEvent) throws SQLException {

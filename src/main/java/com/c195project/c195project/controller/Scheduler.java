@@ -30,6 +30,12 @@ public class Scheduler implements Initializable {
     public TableColumn startCol;
     public RadioButton weekRadioButton;
     public RadioButton monthRadioButton;
+    public Button updateTimeButton;
+    private Month thisMonth;
+
+    public Month getThisMonth() {
+        return thisMonth;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -56,15 +62,23 @@ public class Scheduler implements Initializable {
     public void onAppointmentAddButtonClick(ActionEvent actionEvent) throws IOException {
         AddUpdateAppointment.addButtonClicked = true;
         HelperFunctions.windowLoader("/com/c195project/c195project/AddUpdateAppointment.fxml",
-                LoginPage.class, appointmentAddButton, 600 , 600);
+                LoginPage.class, appointmentAddButton, "Add", 600 , 600);
 
     }
 
     public void onAppointmentUpdateButtonClick(ActionEvent actionEvent) throws IOException {
         AddUpdateAppointment.addButtonClicked = false;
-        AddUpdateAppointment.appointmentSelected = (Appointment) appointmentTableView.getSelectionModel().getSelectedItem();
-        HelperFunctions.windowLoader("/com/c195project/c195project/AddUpdateAppointment.fxml",
-                LoginPage.class, appointmentAddButton, 600 , 600);
+        try {
+            if (appointmentTableView.getSelectionModel().getSelectedItem() == null) {
+                throw new Exception("Please select appointment to update.");
+            }
+            AddUpdateAppointment.appointmentSelected = (Appointment) appointmentTableView.getSelectionModel().getSelectedItem();
+            HelperFunctions.windowLoader("/com/c195project/c195project/AddUpdateAppointment.fxml",
+                    LoginPage.class, appointmentAddButton, "Update", 600, 600);
+        }
+        catch(Exception e){
+            HelperFunctions.showError("Appointment", e.getMessage());
+        }
     }
 
     public void onAppointmentDeleteButtonClick(ActionEvent actionEvent) throws Exception {
@@ -97,24 +111,14 @@ public class Scheduler implements Initializable {
 
     public void onBackClick(ActionEvent actionEvent) throws IOException {
         HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
-                LoginPage.class, backButton, 777, 402);
+                LoginPage.class, backButton, "Customer", 777, 402);
     }
 
     public void onWeekClick(ActionEvent actionEvent) throws SQLException {
         monthRadioButton.setText("Month");
         weekRadioButton.setText("Week - Next 7 Days");
-        filterByTime(8);
-    }
-
-    public void onMonthClick(ActionEvent actionEvent) throws SQLException {
-        weekRadioButton.setText("Week");
-        monthRadioButton.setText("Month - Next 30 Days");
-        filterByTime(31);
-    }
-
-    private void filterByTime(int addDays) throws SQLException {
         LocalDate startDateMinusOne = LocalDate.now().minusDays(1);
-        LocalDate endDatePlusOne = LocalDate.now().plusDays(addDays);
+        LocalDate endDatePlusOne = LocalDate.now().plusDays(8);
 
         System.out.println(startDateMinusOne + "\n" + endDatePlusOne);
 
@@ -134,6 +138,32 @@ public class Scheduler implements Initializable {
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
         System.out.println(filteredList);
+
+        appointmentTableView.setItems(filteredList);
+    }
+
+    public void onMonthClick(ActionEvent actionEvent) throws SQLException {
+        weekRadioButton.setText("Week");
+        this.thisMonth = LocalDate.now().getMonth();
+        monthRadioButton.setText("Month - " + thisMonth.toString());
+        LocalDate startDateMinusOne = LocalDate.now().minusDays(1);
+
+
+        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+        if(CustomerPage.customerIsNotSelected){
+            appointmentList = AppointmentDAO.getAppointmentList();
+        }
+        else{
+            appointmentList = AppointmentDAO.getApptListByCustomerID(customerSelected);
+        }
+
+        Predicate<Appointment> isSameMonth = a -> thisMonth.equals(a.getStartDateTime().getMonth());
+        Predicate<Appointment> isOnOrAfterCurrentDate = a -> a.getStartDateTime().toLocalDate().isAfter(startDateMinusOne);
+
+        ObservableList<Appointment> filteredList = appointmentList.stream()
+                .filter(isSameMonth)
+                .filter(isOnOrAfterCurrentDate)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
         appointmentTableView.setItems(filteredList);
     }
@@ -159,5 +189,18 @@ public class Scheduler implements Initializable {
             }
         }
 
+    }
+
+    public void onUpdateTimeClick(ActionEvent actionEvent) {
+        try {
+            if (appointmentTableView.getSelectionModel().getSelectedItem() == null) {
+                throw new Exception("Please select appointment for time adjustment.");
+            }
+            UpdateAppointmentTime.appointmentSelected = (Appointment) appointmentTableView.getSelectionModel().getSelectedItem();
+            HelperFunctions.windowLoader("/com/c195project/c195project/TimeChange.fxml",
+                    Scheduler.class, updateTimeButton, "Time Change", 248, 152);
+        }catch(Exception e){
+            HelperFunctions.showError("Error", e.getMessage());
+        }
     }
 }

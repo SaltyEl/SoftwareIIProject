@@ -1,6 +1,7 @@
 package com.c195project.c195project.DAO;
 
 import com.c195project.c195project.controller.LoginPage;
+import com.c195project.c195project.controller.UpdateAppointmentTime;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Customer;
 import com.c195project.c195project.helpers.JDBC;
@@ -11,6 +12,7 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -118,5 +120,14 @@ public class AppointmentDAO {
             JDBC.closeConnection();
         }
         return -1;
+    }
+
+    public static void updateAppointmentTime(Appointment appointment) throws SQLException {
+        String stmt = "UPDATE client_schedule.appointments SET start='" + Timestamp.valueOf(appointment.getStartDateTime())
+                + "', end='" + Timestamp.valueOf(appointment.getEndDateTime()) + "' WHERE appointment_id=" + appointment.getId();
+
+        JDBC.openConnection();
+        Query.querySQL(stmt);
+        JDBC.closeConnection();
     }
 }
