@@ -6,6 +6,7 @@ import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Customer;
 import com.c195project.c195project.helpers.JDBC;
 import com.c195project.c195project.helpers.Query;
+import com.c195project.c195project.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -14,6 +15,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class AppointmentDAO {
@@ -62,6 +65,23 @@ public class AppointmentDAO {
         ObservableList<Appointment> resultList = listToFilter.stream()
                 .filter(a -> a.getCustomerID() == customer.getId())
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        return resultList;
+    }
+
+    public static List<Appointment> getApptListByUserId() throws SQLException {
+        User currentUser = UserDAO.getUser(LoginPage.currentUser);
+        String stmt = "SELECT * FROM client_schedule.appointments WHERE user_id=" + currentUser.getUserId();
+        JDBC.openConnection();
+        Query.querySQL(stmt);
+        ResultSet result = Query.getResult();
+        List<Appointment> resultList = new ArrayList<>();
+        while(result.next()){
+            int id = result.getInt("appointment_id");
+            LocalDateTime start = result.getTimestamp("start").toLocalDateTime();
+            Appointment appointment = new Appointment(id, start);
+            resultList.add(appointment);
+        }
+        JDBC.closeConnection();
         return resultList;
     }
 

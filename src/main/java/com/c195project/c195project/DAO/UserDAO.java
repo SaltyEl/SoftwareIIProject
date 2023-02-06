@@ -1,6 +1,7 @@
 package com.c195project.c195project.DAO;
 
 import com.c195project.c195project.controller.LoginPage;
+import com.c195project.c195project.helpers.HelperFunctions;
 import com.c195project.c195project.helpers.JDBC;
 import com.c195project.c195project.helpers.Query;
 import com.c195project.c195project.model.User;
@@ -57,6 +58,28 @@ public class UserDAO {
         }
         JDBC.closeConnection();
         return false;
+    }
+
+    public static User getUser(String customerName){
+        try {
+            JDBC.openConnection();
+            String sqlStatement = "SELECT * FROM client_schedule.users WHERE User_Name = '"
+                    + LoginPage.currentUser + "'";
+            Query.querySQL(sqlStatement);
+            User userResult;
+            ResultSet result = Query.getResult();
+            result.next();
+            int userId = result.getInt("User_ID");
+            String userName = result.getString("User_Name");
+            String password = result.getString("Password");
+            userResult = new User(userId, userName, password);
+            JDBC.closeConnection();
+            return userResult;
+        }catch(SQLException e){
+            HelperFunctions.showError("Error: ", e.getMessage());
+            return null;
+        }
+
     }
 
 }

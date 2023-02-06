@@ -25,6 +25,7 @@ public class LoginPage implements Initializable {
     public Button loginBtn;
     public Label timeZoneTxt;
     public static String currentUser;
+    public static boolean loginButtonClicked;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,6 +65,7 @@ public class LoginPage implements Initializable {
                     return;
                 }
                 if (password.equals(user.getPassword())){
+                    loginButtonClicked = true;
                     currentUser = usernameTxt.getText();
                     HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
                             LoginPage.class, loginBtn, "Customer",777, 402);

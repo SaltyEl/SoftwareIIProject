@@ -21,6 +21,11 @@ public class Appointment {
     public Appointment() {
         this.id = 0;
     }
+    public Appointment(int id, LocalDateTime startTime){
+        this.id = id;
+        this.startDateTime = startTime;
+        this.formattedStartTime = startDateTime.format(dtf);
+    }
 
     @Override
     public String toString(){

@@ -1,6 +1,7 @@
 package com.c195project.c195project.controller;
 
 import com.c195project.c195project.Main;
+import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Customer;
 import com.c195project.c195project.DAO.AppointmentDAO;
 import com.c195project.c195project.DAO.CustomerDAO;
@@ -15,9 +16,13 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class CustomerPage implements Initializable {
@@ -36,6 +41,27 @@ public class CustomerPage implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            if (LoginPage.loginButtonClicked) {
+                Appointment appointment = hasApptWithinFifteen();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Reminder");
+                if (appointment != null) {
+                    alert.setContentText("You have an appointment within 15 minutes."
+                            + "\nAppointment ID: " + appointment.getId()
+                            + "\nAppointment Time and Date: " + appointment.getFormattedStartTime());
+                } else {
+                    alert.setContentText("No appointments in the next 15 minutes");
+                }
+                alert.showAndWait();
+            }
+        } catch (SQLException e) {
+            HelperFunctions.showError("Error", e.getMessage());
+        }
+        finally{
+            LoginPage.loginButtonClicked = false;
+        }
+
         Task<ObservableList<Customer>> task = new GetAllCustomersTask();
         customerTableView.itemsProperty().bind(task.valueProperty());
         new Thread(task).start();
@@ -101,6 +127,28 @@ public class CustomerPage implements Initializable {
         }catch(Exception e){
             HelperFunctions.showError("Error", e.getMessage());
         }
+    }
+
+    private Appointment hasApptWithinFifteen() throws SQLException {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        List<Appointment> userAppointments = AppointmentDAO.getApptListByUserId();
+        String currentTime = LocalTime.now().format(dtf);
+        LocalDate dateNow = LocalDate.now();
+        LocalTime timeNow = LocalTime.parse(currentTime);
+
+        BiPredicate<LocalTime, LocalTime> isWithin15 = (start, fifteenBefore) -> timeNow.equals(start)
+                || timeNow.equals(fifteenBefore) || (timeNow.isAfter(fifteenBefore) && timeNow.isBefore(start));
+        Predicate<LocalDate> isSameDate = d -> dateNow.equals(d);
+
+        for (Appointment appointment : userAppointments) {
+            LocalTime startTime = appointment.getStartDateTime().toLocalTime();
+            LocalTime startTimeMinusFifteen = startTime.minusMinutes(15);
+            LocalDate date = appointment.getStartDateTime().toLocalDate();
+            if (isWithin15.test(startTime, startTimeMinusFifteen) && isSameDate.test(date)) {
+                return appointment;
+            }
+        }
+        return null;
     }
 }
 
