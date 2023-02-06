@@ -7,6 +7,9 @@ import com.c195project.c195project.DAO.UserDAO;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Contact;
 import com.c195project.c195project.helpers.*;
+import com.c195project.c195project.model.Customer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -22,8 +25,10 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 public class AddUpdateAppointment implements Initializable {
     public static Boolean addButtonClicked;
@@ -132,6 +137,13 @@ public class AddUpdateAppointment implements Initializable {
         BiPredicate<LocalTime, LocalTime> isStartBeforeEnd = LocalTime::isBefore;
         if(!isStartBeforeEnd.test(startTimeEntered.toLocalTime(), endTimeEntered.toLocalTime())){
             throw new Exception("End time must be after start time");
+        }
+
+        appointment.setStartDateTime(startTimeEntered);
+        appointment.setEndDateTime(endTimeEntered);
+        boolean overlap = HelperFunctions.doAppointmentsOverlap(appointment);
+        if(overlap){
+            throw new Exception("Customer appointments cannot overlap");
         }
         appointment.setStartDateTime(HelperFunctions.convertLocalTime(startTimeEntered, UTC));
         appointment.setEndDateTime(HelperFunctions.convertLocalTime(endTimeEntered, UTC));

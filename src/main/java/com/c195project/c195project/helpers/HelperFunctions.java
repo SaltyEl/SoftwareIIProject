@@ -1,7 +1,9 @@
 package com.c195project.c195project.helpers;
 
+import com.c195project.c195project.DAO.AppointmentDAO;
 import com.c195project.c195project.DAO.DivisionDAO;
 import com.c195project.c195project.controller.LoginPage;
+import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Country;
 import com.c195project.c195project.model.Division;
 import javafx.collections.FXCollections;
@@ -13,8 +15,11 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -86,5 +91,32 @@ public class HelperFunctions {
         return (isDuringBusinessHours.test(startTimeInEastern)
                 && (isDuringBusinessHours.test(endTimeInEastern))
                 && (isNotOverNight.test(startDateTime.toLocalDate(), endDateTime.toLocalDate())));
+    }
+
+    public static boolean doAppointmentsOverlap(Appointment appointment) throws SQLException {
+        LocalTime start = appointment.getStartDateTime().toLocalTime();
+        LocalTime end = appointment.getEndDateTime().toLocalTime();
+        LocalDate date = appointment.getStartDateTime().toLocalDate();
+
+        List<Appointment> apptList = AppointmentDAO.getAppointmentList();
+        List<Appointment> filteredList = apptList.stream()
+                .filter(a -> a.getStartDateTime().toLocalDate().equals(date))
+                .filter(a -> a.getCustomerID() == appointment.getCustomerID())
+                .filter(a -> a.getId() != appointment.getId()).toList();
+
+        for(Appointment a : filteredList){
+            LocalTime compareStart = a.getStartDateTime().toLocalTime();
+            LocalTime compareEnd = a.getEndDateTime().toLocalTime();
+            boolean startIsDuringAppointment = start.isAfter(compareStart) && start.isBefore(compareEnd);
+            boolean endIsDuringAppointment = end.isAfter(compareStart) && end.isBefore(compareEnd);
+            boolean apptBetweenStartAndEnd = compareStart.isBefore(end) && compareEnd.isBefore(end)
+                    && compareEnd.isAfter(start) && compareStart.isAfter(start);
+            boolean startsAreSame = compareStart.equals(start);
+            boolean endsAreSame = compareEnd.equals(end);
+            if(startIsDuringAppointment || endIsDuringAppointment || apptBetweenStartAndEnd || startsAreSame || endsAreSame){
+                return true;
+            }
+        }
+        return false;
     }
 }

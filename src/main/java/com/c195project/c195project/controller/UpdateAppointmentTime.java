@@ -57,6 +57,14 @@ public class UpdateAppointmentTime implements Initializable {
             if(!isStartBeforeEnd.test(adjustedStartDateTime.toLocalTime(), adjustedEndDateTime.toLocalTime())){
                 throw new Exception("End time must be after start time");
             }
+
+            appointmentSelected.setStartDateTime(adjustedStartDateTime);
+            appointmentSelected.setEndDateTime(adjustedEndDateTime);
+            boolean overlap = HelperFunctions.doAppointmentsOverlap(appointmentSelected);
+            if(overlap){
+                throw new Exception("Customer appointments cannot overlap");
+            }
+
             ZoneId UTC = ZoneId.of("UTC");
             appointmentSelected.setStartDateTime(HelperFunctions.convertLocalTime(adjustedStartDateTime, UTC));
             appointmentSelected.setEndDateTime(HelperFunctions.convertLocalTime(adjustedEndDateTime, UTC));
