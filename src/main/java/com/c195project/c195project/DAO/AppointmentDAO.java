@@ -3,6 +3,7 @@ package com.c195project.c195project.DAO;
 import com.c195project.c195project.controller.LoginPage;
 import com.c195project.c195project.controller.UpdateAppointmentTime;
 import com.c195project.c195project.model.Appointment;
+import com.c195project.c195project.model.Contact;
 import com.c195project.c195project.model.Customer;
 import com.c195project.c195project.helpers.JDBC;
 import com.c195project.c195project.helpers.Query;
@@ -67,6 +68,12 @@ public class AppointmentDAO {
                 .filter(a -> a.getCustomerID() == customer.getId())
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
         return resultList;
+    }
+
+    public static ObservableList<Appointment> getApptListByContactID(Contact contact) throws SQLException {
+        return getAppointmentList().stream()
+                .filter(a -> a.getContactID() == contact.getId())
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
 
     public static List<Appointment> getApptListByUserId() throws SQLException {

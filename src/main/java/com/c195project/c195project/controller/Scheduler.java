@@ -1,6 +1,8 @@
 package com.c195project.c195project.controller;
 
+import com.c195project.c195project.DAO.ContactDAO;
 import com.c195project.c195project.model.Appointment;
+import com.c195project.c195project.model.Contact;
 import com.c195project.c195project.model.Customer;
 import com.c195project.c195project.DAO.AppointmentDAO;
 import com.c195project.c195project.helpers.HelperFunctions;
@@ -34,6 +36,10 @@ public class Scheduler implements Initializable {
     public Button countButton;
     public TextField monthOrTypeTextField;
     public Label countLabel;
+    public ComboBox contactComboBox;
+    public Button showAllButton;
+    public ToggleGroup appointmentFilter;
+    public RadioButton showAllRadioButton;
     private Month thisMonth;
 
     @Override
@@ -42,6 +48,7 @@ public class Scheduler implements Initializable {
             adjustableLabel.setText("All Customer Appointments");
             try {
                 appointmentTableView.setItems(AppointmentDAO.getAppointmentList());
+                contactComboBox.setItems(ContactDAO.getContactList());
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -51,6 +58,7 @@ public class Scheduler implements Initializable {
             adjustableLabel.setText("Appointments for: " + customerSelected.getName());
             try {
                 appointmentTableView.setItems(AppointmentDAO.getApptListByCustomerID(customerSelected));
+                contactComboBox.setItems(ContactDAO.getContactList());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -114,6 +122,7 @@ public class Scheduler implements Initializable {
     }
 
     public void onWeekClick(ActionEvent actionEvent) throws SQLException {
+        contactComboBox.getSelectionModel().clearSelection();
         monthRadioButton.setText("Month");
         weekRadioButton.setText("Week - Next 7 Days");
         LocalDate startDateMinusOne = LocalDate.now().minusDays(1);
@@ -140,6 +149,7 @@ public class Scheduler implements Initializable {
     }
 
     public void onMonthClick(ActionEvent actionEvent) throws SQLException {
+        contactComboBox.getSelectionModel().clearSelection();
         weekRadioButton.setText("Week");
         this.thisMonth = LocalDate.now().getMonth();
         monthRadioButton.setText("Month - " + thisMonth.toString());
@@ -223,5 +233,32 @@ public class Scheduler implements Initializable {
         }
         int typeCount = AppointmentDAO.countAppointmentsByType(userInput);
         countLabel.setText(String.valueOf(typeCount));
+    }
+
+    public void onContactClick(ActionEvent actionEvent) throws SQLException {
+        Contact contact = (Contact) contactComboBox.getSelectionModel().getSelectedItem();
+        if(contact == null){
+            return;
+        }
+        appointmentFilter.selectToggle(showAllRadioButton);
+        weekRadioButton.setText("Week");
+        monthRadioButton.setText("Month");
+        adjustableLabel.setText("Appointments for " + contact.toString());
+        appointmentTableView.setItems(AppointmentDAO.getApptListByContactID(contact));
+    }
+
+    public void onShowAllButtonClick(ActionEvent actionEvent) throws SQLException {
+        appointmentFilter.selectToggle(showAllRadioButton);
+        weekRadioButton.setText("Week");
+        monthRadioButton.setText("Month");
+        contactComboBox.getSelectionModel().clearSelection();
+        if(CustomerPage.customerIsNotSelected){
+            adjustableLabel.setText("All Customer Appointments");
+            appointmentTableView.setItems(AppointmentDAO.getAppointmentList());
+        }
+        else{
+            adjustableLabel.setText("Appointments for: " + customerSelected.getName());
+            appointmentTableView.setItems(AppointmentDAO.getApptListByCustomerID(customerSelected));
+        }
     }
 }

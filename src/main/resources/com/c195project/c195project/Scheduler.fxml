@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
@@ -72,9 +73,9 @@
                </columns>
             </TableView>
             <Label fx:id="adjustableLabel" layoutX="60.0" layoutY="218.0" text="Filler" />
-            <HBox layoutX="682.0" layoutY="212.0" prefHeight="29.0" prefWidth="358.0" spacing="15.0">
+            <HBox layoutX="604.0" layoutY="212.0" prefHeight="29.0" prefWidth="436.0" spacing="15.0">
                <children>
-                  <Button fx:id="appointmentAddButton" mnemonicParsing="false" onAction="#onAppointmentAddButtonClick" text="Add" />
+                  <Button fx:id="appointmentAddButton" mnemonicParsing="false" onAction="#onAppointmentAddButtonClick" prefHeight="26.0" prefWidth="116.0" text="Add Appointment" />
                   <Button fx:id="updateTimeButton" mnemonicParsing="false" onAction="#onUpdateTimeClick" text="Update Time" />
                   <Button fx:id="updateAppointmentButton" mnemonicParsing="false" onAction="#onAppointmentUpdateButtonClick" text="Update Appointment" />
                   <Button fx:id="deleteAppointmentButton" mnemonicParsing="false" onAction="#onAppointmentDeleteButtonClick" text="Delete" />
@@ -97,7 +98,7 @@
                </toggleGroup>
             </RadioButton>
             <RadioButton fx:id="monthRadioButton" mnemonicParsing="false" onAction="#onMonthClick" text="Month" toggleGroup="$appointmentFilter" />
-            <RadioButton mnemonicParsing="false" onAction="#onAllClicked" selected="true" text="Show All" toggleGroup="$appointmentFilter" />
+            <RadioButton fx:id="showAllRadioButton" mnemonicParsing="false" onAction="#onAllClicked" selected="true" text="Show All" toggleGroup="$appointmentFilter" />
          </children>
       </VBox>
       <Label layoutX="839.0" layoutY="-4.0" prefHeight="54.0" prefWidth="190.0" text="Number Of Appointments By Month Or Type" textAlignment="CENTER" wrapText="true" />
@@ -105,8 +106,15 @@
       <Button fx:id="countButton" layoutX="994.0" layoutY="44.0" mnemonicParsing="false" onAction="#onCountButtonClick" prefHeight="29.0" prefWidth="88.0" text="Get Count" textAlignment="CENTER" wrapText="true" />
       <HBox alignment="CENTER" layoutX="1098.0" layoutY="46.0" prefHeight="26.0" prefWidth="52.0" style="-fx-border-style: solid;">
          <children>
-            <Label fx:id="countLabel" prefHeight="26.0" prefWidth="38.0" text="Count" textAlignment="CENTER" />
+            <Label fx:id="countLabel" prefHeight="26.0" prefWidth="38.0" text="Count" textFill="#171717" />
          </children>
       </HBox>
+      <Label layoutX="479.0" layoutY="40.0" prefHeight="37.0" prefWidth="70.0" text="Filter By Contact" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="contactComboBox" layoutX="544.0" layoutY="46.0" onAction="#onContactClick" prefHeight="26.0" prefWidth="94.0" />
+      <Button fx:id="showAllButton" layoutX="644.0" layoutY="46.0" mnemonicParsing="false" onAction="#onShowAllButtonClick" text="Show All" />
    </children>
 </AnchorPane>
