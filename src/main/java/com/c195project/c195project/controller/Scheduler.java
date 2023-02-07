@@ -31,11 +31,10 @@ public class Scheduler implements Initializable {
     public RadioButton weekRadioButton;
     public RadioButton monthRadioButton;
     public Button updateTimeButton;
+    public Button countButton;
+    public TextField monthOrTypeTextField;
+    public Label countLabel;
     private Month thisMonth;
-
-    public Month getThisMonth() {
-        return thisMonth;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,7 +42,7 @@ public class Scheduler implements Initializable {
             adjustableLabel.setText("All Customer Appointments");
             try {
                 appointmentTableView.setItems(AppointmentDAO.getAppointmentList());
-                
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -119,8 +118,6 @@ public class Scheduler implements Initializable {
         weekRadioButton.setText("Week - Next 7 Days");
         LocalDate startDateMinusOne = LocalDate.now().minusDays(1);
         LocalDate endDatePlusOne = LocalDate.now().plusDays(8);
-
-        System.out.println(startDateMinusOne + "\n" + endDatePlusOne);
 
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
         if(CustomerPage.customerIsNotSelected){
@@ -202,5 +199,29 @@ public class Scheduler implements Initializable {
         }catch(Exception e){
             HelperFunctions.showError("Error", e.getMessage());
         }
+    }
+
+    public void onCountButtonClick(ActionEvent actionEvent) throws SQLException {
+        if(monthOrTypeTextField.getText().matches("^(1[0-2]|[0-9]|0[0-9])$")){
+            Integer monthNumber = Integer.parseInt(monthOrTypeTextField.getText());
+            String monthNumberToString = monthNumber.toString();
+            if(monthNumberToString.startsWith("0")){
+                String simplifiedNum = monthNumberToString.substring(1);
+                monthNumber = Integer.parseInt(simplifiedNum);
+            }
+            countLabel.setText(String.valueOf(AppointmentDAO.countAppointmentsByMonth(monthNumber)));
+            return;
+        }
+        String userInput = monthOrTypeTextField.getText();
+        Month[] allMonths = Month.values();
+        for(Month month : allMonths){
+            if(month.toString().equals(userInput.toUpperCase())){
+                int monthNum = month.getValue();
+                countLabel.setText(String.valueOf(AppointmentDAO.countAppointmentsByMonth(monthNum)));
+                return;
+            }
+        }
+        int typeCount = AppointmentDAO.countAppointmentsByType(userInput);
+        countLabel.setText(String.valueOf(typeCount));
     }
 }

@@ -5,6 +5,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -99,5 +100,13 @@
             <RadioButton mnemonicParsing="false" onAction="#onAllClicked" selected="true" text="Show All" toggleGroup="$appointmentFilter" />
          </children>
       </VBox>
+      <Label layoutX="839.0" layoutY="-4.0" prefHeight="54.0" prefWidth="190.0" text="Number Of Appointments By Month Or Type" textAlignment="CENTER" wrapText="true" />
+      <TextField fx:id="monthOrTypeTextField" layoutX="884.0" layoutY="44.0" prefHeight="29.0" prefWidth="100.0" promptText="Month or Type" />
+      <Button fx:id="countButton" layoutX="994.0" layoutY="44.0" mnemonicParsing="false" onAction="#onCountButtonClick" prefHeight="29.0" prefWidth="88.0" text="Get Count" textAlignment="CENTER" wrapText="true" />
+      <HBox alignment="CENTER" layoutX="1098.0" layoutY="46.0" prefHeight="26.0" prefWidth="52.0" style="-fx-border-style: solid;">
+         <children>
+            <Label fx:id="countLabel" prefHeight="26.0" prefWidth="38.0" text="Count" textAlignment="CENTER" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

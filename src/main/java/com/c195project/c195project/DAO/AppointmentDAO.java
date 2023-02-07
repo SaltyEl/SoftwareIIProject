@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -150,5 +151,27 @@ public class AppointmentDAO {
         JDBC.openConnection();
         Query.querySQL(stmt);
         JDBC.closeConnection();
+    }
+
+    public static int countAppointmentsByMonth(int monthNum) throws SQLException {
+        String stmt = "SELECT COUNT(*) FROM client_schedule.appointments WHERE MONTH(start) = " + monthNum;
+        JDBC.openConnection();
+        Query.querySQL(stmt);
+        ResultSet result = Query.getResult();
+        result.next();
+        int numMonths = result.getInt(1);
+        JDBC.closeConnection();
+        return numMonths;
+    }
+
+    public static int countAppointmentsByType(String userQuery) throws SQLException{
+        String stmt = "SELECT COUNT(*) FROM client_schedule.appointments WHERE type = '" + userQuery + "'";
+        JDBC.openConnection();
+        Query.querySQL(stmt);
+        ResultSet result = Query.getResult();
+        result.next();
+        int count = result.getInt(1);
+        JDBC.closeConnection();
+        return count;
     }
 }
