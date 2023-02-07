@@ -7,9 +7,6 @@ import com.c195project.c195project.DAO.UserDAO;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Contact;
 import com.c195project.c195project.helpers.*;
-import com.c195project.c195project.model.Customer;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -25,11 +22,14 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.BiPredicate;
-import java.util.stream.Collectors;
 
+/**
+ * The controller for interaction between Appointment.java, AppointmentDAO.java and Add-Update-Customer.fxml
+ *
+ * @author Blake Ramsey
+ */
 public class AddUpdateAppointment implements Initializable {
     public static Boolean addButtonClicked;
     public ComboBox contactNameComboBox;

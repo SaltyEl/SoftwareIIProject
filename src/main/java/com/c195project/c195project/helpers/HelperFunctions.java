@@ -6,6 +6,7 @@ import com.c195project.c195project.controller.LoginPage;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Country;
 import com.c195project.c195project.model.Division;
+import com.c195project.c195project.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -14,13 +15,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -40,6 +41,19 @@ public class HelperFunctions {
         alert.showAndWait();
     }
 
+    /**
+     * This method directs user to the next appropriate window.<br><br> Improvements: I have altered
+     * the method such that it can be used statically across the program. In Software I project I was
+     * not able to figure this out.
+     *
+     * @param fxmlDoc The location of the window that should be loaded.
+     * @param classname The class from which the method is called.
+     * @param buttonClicked The button that is clicked.
+     * @param title Title of the window to be loaded.
+     * @param width The width of window to be loaded.
+     * @param height The height of window to be loaded.
+     * @throws IOException
+     */
     public static void windowLoader(String fxmlDoc, Class classname, Button buttonClicked, String title, double width, double height) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(classname.getResource(fxmlDoc));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
@@ -118,5 +132,29 @@ public class HelperFunctions {
             }
         }
         return false;
+    }
+
+    public static void trackUserLoginAttempts(User user, boolean loginSuccess) throws IOException {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime timeDateUTC = HelperFunctions.convertLocalTime(LocalDateTime.now(), ZoneId.of("UTC"));
+        String timeUTC = timeDateUTC.toLocalTime().format(timeFormat);
+        String dateUTC = timeDateUTC.toLocalDate().format(dateFormat);
+
+        //Login Attempt by USERNAME on DATE at TIME - SUCCESS / FAILURE;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Login Attempt by '" + user.toString() + "' on " + dateUTC + " at " + timeUTC + " UTC - ");
+        if(loginSuccess){
+            sb.append("SUCCESS");
+        }
+        else{
+            sb.append("FAILURE");
+        }
+        String loginAttemptString = sb.toString();
+        String fileName = "login_activity.txt";
+        FileWriter fileWriter = new FileWriter(fileName, true);
+        PrintWriter fileOutput = new PrintWriter(fileWriter);
+        fileOutput.println(loginAttemptString);
+        fileOutput.close();
     }
 }
