@@ -90,7 +90,7 @@
       </Label>
       <Button fx:id="backButton" layoutX="1105.0" layoutY="344.0" mnemonicParsing="false" onAction="#onBackClick" text="Back" />
       <Label layoutX="50.0" layoutY="6.0" text="Filter Appointments By:" />
-      <VBox layoutX="187.0" layoutY="7.0" prefHeight="73.0" prefWidth="169.0" spacing="5.0">
+      <VBox layoutX="187.0" layoutY="7.0" prefHeight="73.0" prefWidth="216.0" spacing="5.0">
          <children>
             <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" onAction="#onWeekClick" text="Week">
                <toggleGroup>

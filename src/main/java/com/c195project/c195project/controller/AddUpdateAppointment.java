@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 import java.util.function.BiPredicate;
 
 /**
- * The controller for interaction between Appointment.java, AppointmentDAO.java and Add-Update-Customer.fxml
+ * The controller for interaction between Appointment.java, AppointmentDAO.java and AddUpdateAppointment.fxml
  *
  * @author Blake Ramsey
  */
@@ -140,7 +140,10 @@ public class AddUpdateAppointment implements Initializable {
     }
 
     /**
-     * This method creates an Appointment object from the information that is provided by the user.
+     * This method creates an Appointment object from the information that is provided by the user.<br><br>
+     * Lambda justification -> Using Lambda to describe a BiPredicate variable. Lambda simplifies this expression
+     * and leads to cleaner code. This anonymous function is not necessarily needed throughout the rest of the
+     * application.
      *
      * @param appointment Provides an Appointment object to be updated, or an Appointment object which contains an ID
      *                    of 0, but is otherwise empty.

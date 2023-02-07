@@ -63,6 +63,17 @@ public class HelperFunctions {
         stage.show();
     }
 
+    /**
+     * This method is the same as the windowLoader, except it accounts for Locale and will adapt language accordingly.
+     *
+     * @param fxmlDoc The location of the window that should be loaded.
+     * @param classname The class from which the method is called.
+     * @param buttonClicked The button that is clicked.
+     * @param title Title of the window to be loaded.
+     * @param width The width of window to be loaded.
+     * @param height The height of window to be loaded.
+     * @throws IOException
+     */
     public static void frenchWindowLoader(String fxmlDoc, Class classname, Button buttonClicked, String title, double width, double height) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(classname.getResource(fxmlDoc));
         Scene scene = new Scene(fxmlLoader.load(), width, height);

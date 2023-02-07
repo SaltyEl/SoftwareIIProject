@@ -13,6 +13,11 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * The controller for interaction between User.java, UserDAO.java and login-page.fxml
+ *
+ * @author Blake Ramsey
+ */
 public class LoginPage implements Initializable {
 
     public TextField usernameTxt;
@@ -27,6 +32,14 @@ public class LoginPage implements Initializable {
     public static String currentUser;
     public static boolean loginButtonClicked;
 
+    /**
+     * This method initializes the LoginPage controller after root element has been processed. If computer language is
+     * set to french, the page is initialized so that all labels and buttons are translated to french.
+     *
+     * @param url Resolves relative paths for root object, or null if location is not known.
+     * <br>
+     * @param resourceBundle Resources used to localize root object, or null if root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Need to take out and test with actual computer change in language.
@@ -44,14 +57,30 @@ public class LoginPage implements Initializable {
         }
     }
 
+    /**
+     *
+     * @return the userName
+     */
     public static String getUserName() {
         return userName;
     }
 
+    /**
+     *
+     * @return the password
+     */
     public static String getPassword() {
         return password;
     }
 
+    /**
+     * This method checks to see if userName exists, and then compares it against the password retrieved for that user
+     * from the database. If username / password combination are correct, the user is directed to the customer page. If
+     * the username / password combination are not correct, the user is given an appropriate error message.
+     *
+     * @param actionEvent The actionEvent is clicking on the LoginButton.
+     * @throws Exception
+     */
     public void onLoginButtonClick(ActionEvent actionEvent) throws Exception{
         try {
             userName = usernameTxt.getText();

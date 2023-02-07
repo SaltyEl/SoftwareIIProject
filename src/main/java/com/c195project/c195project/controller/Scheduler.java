@@ -21,6 +21,11 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * The controller for interaction between Appointment.java, AppointmentDAO.java and Scheduler.fxml.
+ *
+ * @author Blake Ramsey
+ */
 public class Scheduler implements Initializable {
     public Button appointmentAddButton;
     public Button updateAppointmentButton;
@@ -42,6 +47,13 @@ public class Scheduler implements Initializable {
     public RadioButton showAllRadioButton;
     private Month thisMonth;
 
+    /**
+     * This method initializes the Scheduler controller after root element has been processed.
+     *
+     * @param url Resolves relative paths for root object, or null if location is not known.
+     * <br>
+     * @param resourceBundle Resources used to localize root object, or null if root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(CustomerPage.customerIsNotSelected){
@@ -66,6 +78,13 @@ public class Scheduler implements Initializable {
 
     }
 
+    /**
+     * This method uses the windowLoader method in order to direct the user to the Add Appointment window. This method
+     * assigns 'true' to the addButtonClicked boolean.
+     *
+     * @param actionEvent The actionEvent is clicking on the Add Appointment Button.
+     * @throws IOException
+     */
     public void onAppointmentAddButtonClick(ActionEvent actionEvent) throws IOException {
         AddUpdateAppointment.addButtonClicked = true;
         HelperFunctions.windowLoader("/com/c195project/c195project/AddUpdateAppointment.fxml",
@@ -73,6 +92,14 @@ public class Scheduler implements Initializable {
 
     }
 
+    /**
+     * This method uses the windowLoader method in order to direct the user to the Update Appointment window. This method
+     * assigns 'false' to the addButtonClicked boolean. This method assigns an Appointment object to appointmentSelected,
+     * and passes this to the next window. If no appointment is selected, error is thrown.
+     *
+     * @param actionEvent The actionEvent is clicking on the Update Appointment Button.
+     * @throws IOException
+     */
     public void onAppointmentUpdateButtonClick(ActionEvent actionEvent) throws IOException {
         AddUpdateAppointment.addButtonClicked = false;
         try {
@@ -88,6 +115,13 @@ public class Scheduler implements Initializable {
         }
     }
 
+    /**
+     * This method is to delete selected appointment. Confirmation alert pops up to make sure appointment should be deleted. Information
+     * alert populates after appointment is deleted to inform of deletion details.
+     *
+     * @param actionEvent The actionEvent is the Delete button being clicked.
+     * @throws Exception
+     */
     public void onAppointmentDeleteButtonClick(ActionEvent actionEvent) throws Exception {
         try {
             if (appointmentTableView.getSelectionModel().getSelectedItem() == null) {
@@ -116,11 +150,25 @@ public class Scheduler implements Initializable {
         }
     }
 
+    /**
+     * This method uses the windowLoader method to take the user back to the Customer page.
+     *
+     * @param actionEvent The actionEvent is the Back button being clicked.
+     * @throws IOException
+     */
     public void onBackClick(ActionEvent actionEvent) throws IOException {
         HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
                 LoginPage.class, backButton, "Customer", 777, 402);
     }
 
+    /**
+     * This method filters appointments by week (the next 7 days). For example, if clicked on a Thursday, it would
+     * show appointments through the following Thursday. Accounts for if specific customer appointments are showing, and
+     * filters accordingly.
+     *
+     * @param actionEvent The actionEvent is the weekRadioButton being clicked.
+     * @throws SQLException
+     */
     public void onWeekClick(ActionEvent actionEvent) throws SQLException {
         contactComboBox.getSelectionModel().clearSelection();
         monthRadioButton.setText("Month");
@@ -152,7 +200,7 @@ public class Scheduler implements Initializable {
         contactComboBox.getSelectionModel().clearSelection();
         weekRadioButton.setText("Week");
         this.thisMonth = LocalDate.now().getMonth();
-        monthRadioButton.setText("Month - " + thisMonth.toString());
+        monthRadioButton.setText("Remainder of Month - " + thisMonth.toString());
         LocalDate startDateMinusOne = LocalDate.now().minusDays(1);
 
 
