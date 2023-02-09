@@ -1,6 +1,8 @@
 package com.c195project.c195project.DAO;
 
+import com.c195project.c195project.controller.CustomerPage;
 import com.c195project.c195project.controller.LoginPage;
+import com.c195project.c195project.controller.Scheduler;
 import com.c195project.c195project.controller.UpdateAppointmentTime;
 import com.c195project.c195project.model.Appointment;
 import com.c195project.c195project.model.Contact;
@@ -71,9 +73,18 @@ public class AppointmentDAO {
     }
 
     public static ObservableList<Appointment> getApptListByContactID(Contact contact) throws SQLException {
-        return getAppointmentList().stream()
-                .filter(a -> a.getContactID() == contact.getId())
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        if(CustomerPage.customerIsNotSelected){
+            return getAppointmentList().stream()
+                    .filter(a -> a.getContactID() == contact.getId())
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+        else{
+            Customer customer = Scheduler.customerSelected;
+            return getApptListByCustomerID(customer).stream()
+                    .filter(a -> a.getContactID() == contact.getId())
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
     }
 
     public static List<Appointment> getApptListByUserId() throws SQLException {

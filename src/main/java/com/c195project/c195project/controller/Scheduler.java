@@ -163,7 +163,7 @@ public class Scheduler implements Initializable {
 
     /**
      * This method filters appointments by week (the next 7 days). For example, if clicked on a Thursday, it would
-     * show appointments through the following Thursday. Accounts for if specific customer appointments are showing, and
+     * show appointments through the following Thursday. This method accounts for if specific customer appointments are showing, and
      * filters accordingly.
      *
      * @param actionEvent The actionEvent is the weekRadioButton being clicked.
@@ -196,6 +196,14 @@ public class Scheduler implements Initializable {
         appointmentTableView.setItems(filteredList);
     }
 
+    /**
+     * This method filters appointments by month, and shows any remaining appointments for that month.
+     * This method accounts for if specific customer appointments are showing, and
+     * filters accordingly.
+     *
+     * @param actionEvent The actionEvent is the monthRadioButton being clicked.
+     * @throws SQLException
+     */
     public void onMonthClick(ActionEvent actionEvent) throws SQLException {
         contactComboBox.getSelectionModel().clearSelection();
         weekRadioButton.setText("Week");
@@ -223,6 +231,13 @@ public class Scheduler implements Initializable {
         appointmentTableView.setItems(filteredList);
     }
 
+    /**
+     * This method shows all appointments.
+     * This method accounts for if specific customer appointments are showing, and
+     * filters accordingly.
+     *
+     * @param actionEvent The actionEvent is the showAllRadioButton being clicked.
+     */
     public void onAllClicked(ActionEvent actionEvent) {
         weekRadioButton.setText("Week");
         monthRadioButton.setText("Month");
@@ -246,6 +261,12 @@ public class Scheduler implements Initializable {
 
     }
 
+    /**
+     * This method utilizes the windowLoader method in order to send the user to the UpdateAppointmentTime window. If appointment
+     * selection is made then an appropriate error is thrown.
+     *
+     * @param actionEvent The actionEvent is the updateTimeButton being clicked.
+     */
     public void onUpdateTimeClick(ActionEvent actionEvent) {
         try {
             if (appointmentTableView.getSelectionModel().getSelectedItem() == null) {
@@ -259,6 +280,13 @@ public class Scheduler implements Initializable {
         }
     }
 
+    /**
+     * This method returns a count of total appointments (not filtered by customer) which contain a specified type or fall inside
+     * a specified month. The user enters the month (i.e. Jan / 01 / 1) or the type of appointment in order to filter results.
+     *
+     * @param actionEvent The actionEvent is the countButton being clicked.
+     * @throws SQLException
+     */
     public void onCountButtonClick(ActionEvent actionEvent) throws SQLException {
         if(monthOrTypeTextField.getText().matches("^(1[0-2]|[0-9]|0[0-9])$")){
             Integer monthNumber = Integer.parseInt(monthOrTypeTextField.getText());
@@ -283,6 +311,13 @@ public class Scheduler implements Initializable {
         countLabel.setText(String.valueOf(typeCount));
     }
 
+    /**
+     * This method uses a combobox in order to filter appointments by Contact. This method additionally filters by contact for each
+     * customer selected.
+     *
+     * @param actionEvent The actionEvent is a contactComboBox selection being made.
+     * @throws SQLException
+     */
     public void onContactClick(ActionEvent actionEvent) throws SQLException {
         Contact contact = (Contact) contactComboBox.getSelectionModel().getSelectedItem();
         if(contact == null){
@@ -293,8 +328,15 @@ public class Scheduler implements Initializable {
         monthRadioButton.setText("Month");
         adjustableLabel.setText("Appointments for " + contact.toString());
         appointmentTableView.setItems(AppointmentDAO.getApptListByContactID(contact));
+
     }
 
+    /**
+     * This method shows all appointments or all appointments for selected customer.
+     *
+     * @param actionEvent The actionEvent is the showAllButton being clicked.
+     * @throws SQLException
+     */
     public void onShowAllButtonClick(ActionEvent actionEvent) throws SQLException {
         appointmentFilter.selectToggle(showAllRadioButton);
         weekRadioButton.setText("Week");

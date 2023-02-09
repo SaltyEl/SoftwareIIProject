@@ -19,19 +19,39 @@ import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 import java.util.function.BiPredicate;
 
+/**
+ * The controller for interaction between Scheduler.java, AppointmentDAO.java and TimeChange.fxml.
+ *
+ * @author Blake Ramsey
+ */
 public class UpdateAppointmentTime implements Initializable {
 
     public static Appointment appointmentSelected;
     public TextField startTimeTextBox;
     public TextField endTimeTextBox;
     public Button backButton;
+    public Button saveButton;
 
+    /**
+     * This method initializes the UpdateAppointmentTime controller after root element has been processed.
+     *
+     * @param url Resolves relative paths for root object, or null if location is not known.
+     * <br>
+     * @param resourceBundle Resources used to localize root object, or null if root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         startTimeTextBox.setText(appointmentSelected.getStartDateTime().toLocalTime().toString());
         endTimeTextBox.setText(appointmentSelected.getEndDateTime().toLocalTime().toString());
     }
 
+    /**
+     * This method saves the updated times of the appointment which was selected in previous window. If text fields are empty,
+     * exception is thrown. If not within business hours, exception is thrown. If end time is before start time, exception is
+     * thrown. After save takes place, user is directed back to Scheduler page.
+     *
+     * @param actionEvent The actionEvent is clicking on the saveButton.
+     */
     public void onSaveClick(ActionEvent actionEvent) {
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
@@ -70,7 +90,7 @@ public class UpdateAppointmentTime implements Initializable {
             appointmentSelected.setEndDateTime(HelperFunctions.convertLocalTime(adjustedEndDateTime, UTC));
             AppointmentDAO.updateAppointmentTime(appointmentSelected);
             HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
-                    UpdateAppointmentTime.class, backButton, "Scheduler", 1200, 400);
+                    UpdateAppointmentTime.class, saveButton, "Scheduler", 1200, 400);
         }catch(DateTimeParseException dtpe){
             HelperFunctions.showError("Error", "Please enter time format of HH:mm");
         }
@@ -80,6 +100,12 @@ public class UpdateAppointmentTime implements Initializable {
 
     }
 
+    /**
+     * This method utilizes the windoLoader method to send user back to Scheduler window.
+     *
+     * @param actionEvent actionEvent is clicking the backButton.
+     * @throws IOException
+     */
     public void onBackButtonClick(ActionEvent actionEvent) throws IOException {
         HelperFunctions.windowLoader("/com/c195project/c195project/Scheduler.fxml",
                 UpdateAppointmentTime.class, backButton, "Scheduler", 1200, 400);
