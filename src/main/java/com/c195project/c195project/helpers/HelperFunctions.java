@@ -26,6 +26,11 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * This class consists of methods which can assist throughout the implementation of this program.
+ *
+ * @author Blake Ramsey
+ */
 public class HelperFunctions {
 
     /**
@@ -87,6 +92,13 @@ public class HelperFunctions {
         stage.show();
     }
 
+    /**
+     * This method utilizes the DivisionDAO.getDivisionsList() method to obtain a list of Divisions, and then filters
+     * that list by Country. Lambda justification is ease of use and method not needed else where.
+     *
+     * @param country The Country to filter Divisions by.
+     * @return Returns ObservableList of type Division.
+     */
     public static ObservableList<Division> filterDivisionByCountry(Country country){
         ObservableList<Division> divisionList = DivisionDAO.getDivisionsList();
         ObservableList<Division> filteredList =
@@ -97,12 +109,28 @@ public class HelperFunctions {
         return filteredList;
     }
 
+    /**
+     * This method converts user local time and date into any other timezone as specified by the ZoneID argument.
+     *
+     * @param timeToConvert The LocalDateTime object entered by the user.
+     * @param zoneId The ZoneID used to convert the users LocalDateTime object
+     * @return The LocalDateTime after conversion using ZoneID.
+     */
     public static LocalDateTime convertLocalTime(LocalDateTime timeToConvert, ZoneId zoneId){
         ZoneId localZone = ZoneId.systemDefault();
         ZonedDateTime zonedTime = timeToConvert.atZone(localZone);
         return zonedTime.withZoneSameInstant(zoneId).toLocalDateTime();
     }
 
+    /**
+     * A method to determine whether or not the time entered by user is within business hours. This method also uses the date to determine
+     * if the use has entered a meeting start and end time that would run overnight.  Used Lambda expressions to define Predicate and BiPredicate
+     * variables.
+     *
+     * @param startDateTime The LocalDateTime object representing the start of the meeting.
+     * @param endDateTime The LocalDateTime object representing the end of the meeting.
+     * @return Returns True if times are within business hours, and false otherwise.
+     */
     public static Boolean businessIsOpen(LocalDateTime startDateTime, LocalDateTime endDateTime){
         ZoneId eastern = ZoneId.of("America/New_York");
         LocalTime open = LocalTime.of(8, 0);
@@ -118,6 +146,14 @@ public class HelperFunctions {
                 && (isNotOverNight.test(startDateTime.toLocalDate(), endDateTime.toLocalDate())));
     }
 
+    /**
+     * This method determines if there is appointment overlap when creating or updating an appointment, and if so returns true. Lambdas
+     * are used to define filters within a stream, which improves readability.
+     *
+     * @param appointment The appointment to check against all other customer appointments.
+     * @return Returns true if there is appointment overlap, and false if there is no overlap.
+     * @throws SQLException
+     */
     public static boolean doAppointmentsOverlap(Appointment appointment) throws SQLException {
         LocalTime start = appointment.getStartDateTime().toLocalTime();
         LocalTime end = appointment.getEndDateTime().toLocalTime();
@@ -145,6 +181,14 @@ public class HelperFunctions {
         return false;
     }
 
+    /**
+     * This method is used to update login_activity.txt on user login attempts and whether they were successful or not. This method
+     * updates txt file with Username, date, time and success / failure of login attempt.
+     *
+     * @param user The User attempting to log in.
+     * @param loginSuccess The boolean representing success / failure of attempt.
+     * @throws IOException
+     */
     public static void trackUserLoginAttempts(User user, boolean loginSuccess) throws IOException {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");

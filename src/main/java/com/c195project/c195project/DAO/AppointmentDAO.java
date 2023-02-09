@@ -23,10 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The Data Access Object Class which manages the CRUD operations between the MySQL server and Java Application for Appointments.
+ *
+ * @author Blake Ramsey
+ */
 public class AppointmentDAO {
 
     public static final String TABLE_APPOINTMENTS = "client_schedule.appointments";
 
+    /**
+     * This method accesses the appointments table via a database query and returns the number of customer appointments for a specific customer
+     *
+     * @param customer The Customer object whose appointments should be searched for.
+     * @return Returns an int representing the number of appointments for that customer.
+     * @throws SQLException
+     */
     public static int numOfCustomerAppointments(Customer customer) throws SQLException {
         String queryStmt = "SELECT COUNT(customer_id) FROM client_schedule.appointments WHERE customer_id = " + customer.getId();
         JDBC.openConnection();
@@ -38,6 +50,13 @@ public class AppointmentDAO {
         return numOfAppts;
     }
 
+    /**
+     * This method accesses the appointments table via a database query and gets an appointment list for display and
+     * manipulation.
+     *
+     * @return Returns an ObservableList of Appointments.
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAppointmentList() throws SQLException {
         String queryStmt = "SELECT * FROM client_schedule.appointments";
         JDBC.openConnection();
@@ -64,6 +83,15 @@ public class AppointmentDAO {
         return resultList;
     }
 
+    /**
+     * This method utilizes the getAppointmentList() method to fetch all appointments, and then filters these appointments
+     * to show only appointments associated with a specified Customer ID. Lambda justification is readability and method only
+     * needed within this method.
+     *
+     * @param customer The Customer object whose appointments should be searched for.
+     * @return Returns an ObservableList of Appointments.
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getApptListByCustomerID(Customer customer) throws SQLException {
         ObservableList<Appointment> listToFilter = getAppointmentList();
         ObservableList<Appointment> resultList = listToFilter.stream()
@@ -72,6 +100,16 @@ public class AppointmentDAO {
         return resultList;
     }
 
+    /**
+     * This method takes a Contact object as an argument and returns an ObservableList of Appointments, filtered by
+     * Contact ID. List is further filtered by Customer appointments if Customer is selected prior to
+     * entering the Scheduler window. This method utilizes the getAppointmentList() method to acquire a full appointment list from the
+     * database. Lambda justification is readability and method only needed within this method.
+     *
+     * @param contact The contact object used to filter the appointment list.
+     * @return Returns an ObservableList of Appointments.
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getApptListByContactID(Contact contact) throws SQLException {
         if(CustomerPage.customerIsNotSelected){
             return getAppointmentList().stream()
@@ -87,8 +125,14 @@ public class AppointmentDAO {
 
     }
 
+    /**
+     * This method queries the database and retrieves a list of Appointments by User ID.
+     *
+     * @return Returns a list of Appointments.
+     * @throws SQLException
+     */
     public static List<Appointment> getApptListByUserId() throws SQLException {
-        User currentUser = UserDAO.getUser(LoginPage.currentUser);
+        User currentUser = UserDAO.getUser();
         String stmt = "SELECT * FROM client_schedule.appointments WHERE user_id=" + currentUser.getUserId();
         JDBC.openConnection();
         Query.querySQL(stmt);
@@ -104,10 +148,13 @@ public class AppointmentDAO {
         return resultList;
     }
 
+    /**
+     * This method uses an insert statement to add an Appointment to the Appointments table in the database.
+     *
+     * @param appointment The appointment to be added.
+     * @throws SQLException
+     */
     public static void addAppointment(Appointment appointment) throws SQLException {
-        //INSERT INTO appointments VALUES(1, 'title', 'description', 'location',
-        // 'Planning Session', '2020-05-28 12:00:00',
-        // '2020-05-28 13:00:00', NOW(), 'script', NOW(), 'script', 1, 1, 3);
         String insertStmt = "INSERT INTO " + TABLE_APPOINTMENTS + " VALUES(" +
                 appointment.getId() + ", " + "'" + appointment.getTitle() + "', '"
                 + appointment.getDescription() + "', '" + appointment.getLocation()
@@ -121,6 +168,12 @@ public class AppointmentDAO {
         JDBC.closeConnection();
     }
 
+    /**
+     * This method uses an Update statement to update an existing appointment within the database.
+     *
+     * @param appointment The appointment to be updated.
+     * @throws SQLException
+     */
     public static void updateAppointment(Appointment appointment) throws SQLException {
         String updateStmt = "UPDATE " + TABLE_APPOINTMENTS + " SET title='" + appointment.getTitle()
                 + "', description='" + appointment.getDescription() +"', location='" + appointment.getLocation()
@@ -140,6 +193,12 @@ public class AppointmentDAO {
         Query.querySQL(deleteStatement);
         JDBC.closeConnection();
     }
+
+    /**
+     * This method queries the database and returns the highest numbered appointment ID.
+     *
+     * @return Returns an int, the highest numbered appointment ID in the database at that time.
+     */
     public static int findLastAppointmentID() {
         JDBC.openConnection();
         try {
@@ -161,6 +220,12 @@ public class AppointmentDAO {
         return -1;
     }
 
+    /**
+     *This method updates the appointment time within the database.
+     *
+     * @param appointment The appointment to be updated.
+     * @throws SQLException
+     */
     public static void updateAppointmentTime(Appointment appointment) throws SQLException {
         String stmt = "UPDATE client_schedule.appointments SET start='" + Timestamp.valueOf(appointment.getStartDateTime())
                 + "', end='" + Timestamp.valueOf(appointment.getEndDateTime())  + "', last_update=NOW(), last_updated_by='"
@@ -171,6 +236,13 @@ public class AppointmentDAO {
         JDBC.closeConnection();
     }
 
+    /**
+     * This method queries the database and returns and int representing the number of appointments by Month.
+     *
+     * @param monthNum The month in which appointments should be counted.
+     * @return Returns an int representing the number of appointments.
+     * @throws SQLException
+     */
     public static int countAppointmentsByMonth(int monthNum) throws SQLException {
         String stmt = "SELECT COUNT(*) FROM client_schedule.appointments WHERE MONTH(start) = " + monthNum;
         JDBC.openConnection();
@@ -182,6 +254,13 @@ public class AppointmentDAO {
         return numMonths;
     }
 
+    /**
+     * This method queries the database and returns an int representing the number of appointments by Type.
+     *
+     * @param userQuery The Type of appointment to be queried in the database.
+     * @return Returns the number of appointments.
+     * @throws SQLException
+     */
     public static int countAppointmentsByType(String userQuery) throws SQLException{
         String stmt = "SELECT COUNT(*) FROM client_schedule.appointments WHERE type = '" + userQuery + "'";
         JDBC.openConnection();

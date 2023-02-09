@@ -9,8 +9,19 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The Data Access Object Class which manages the CRUD operations between the MySQL server and Java Application for Contacts.
+ *
+ * @author Blake Ramsey
+ */
 public class ContactDAO {
 
+    /**
+     * This method queries the database and returns an ObservableList of all contacts in the database.
+     *
+     * @return Returns an ObservableList of type Contact.
+     * @throws SQLException
+     */
     public static ObservableList<Contact> getContactList() throws SQLException {
         String stmt = "SELECT * FROM client_schedule.contacts";
         ObservableList<Contact> resultList = FXCollections.observableArrayList();

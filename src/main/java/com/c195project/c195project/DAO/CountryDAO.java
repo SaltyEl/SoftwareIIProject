@@ -9,12 +9,23 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The Data Access Object Class which manages the CRUD operations between the MySQL server and Java Application for Country.
+ *
+ * @author Blake Ramsey
+ */
 public class CountryDAO {
 
     public static final String COLUMN_COUNTRY_NAME = "country";
     public static final String COLUMN_COUNTRY_ID = "country_id";
     public static final String TABLE_COUNTRIES = "client_schedule.countries";
 
+    /**
+     * This method queries the database and returns an ObservableList of all countries within the database.
+     *
+     * @return An ObservableList of type Country
+     * @throws SQLException
+     */
     public static ObservableList<Country> getCountryList() throws SQLException {
         try{
             JDBC.openConnection();
@@ -40,6 +51,13 @@ public class CountryDAO {
         return null;
     }
 
+    /**
+     * This method queries the database and returns the Country ID of the customer whose Customer ID is provided as a parameter.
+     *
+     * @param customerID The customers ID to be queried.
+     * @return An int representing the Country ID.
+     * @throws SQLException
+     */
     public static int getCountryFromCustomerID(int customerID) throws SQLException {
         String sqlStmt = "SELECT countries.country_id FROM client_schedule.countries, client_schedule.customers, client_schedule.first_level_divisions " +
                 "WHERE customers.division_id = first_level_divisions.division_id " +
@@ -53,11 +71,15 @@ public class CountryDAO {
         return countryID;
     }
 
+    /**
+     * This method queries the database and returns a String representing the Country for which a division (provided as an argument)
+     * belongs.
+     *
+     * @param divisionID An int representing the Division ID
+     * @return Returns a String representing a Country Name
+     * @throws SQLException
+     */
     public static String getCountryFromDivisionID(int divisionID) throws SQLException{
-        /*SELECT countries.country
-        FROM client_schedule.first_level_divisions, client_schedule.countries
-        WHERE first_level_divisions.country_id = countries.country_id
-        AND first_level_divisions.division_id = 1;*/
 
         String sqlStmt = "SELECT countries.country " +
                 "FROM client_schedule.first_level_divisions, client_schedule.countries " +

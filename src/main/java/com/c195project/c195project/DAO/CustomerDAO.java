@@ -10,6 +10,11 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The Data Access Object Class which manages the CRUD operations between the MySQL server and Java Application for Customer.
+ *
+ * @author Blake Ramsey
+ */
 public class CustomerDAO {
 
     public static final String TABLE_CUSTOMERS = "client_schedule.customers";
@@ -21,8 +26,13 @@ public class CustomerDAO {
     public static final String COLUMN_POSTAL_CODE = "Postal_Code";
     public static final String COLUMN_DIVISION_ID = "Division_ID";
 
-
-public static ObservableList<Customer> getCustomerList() throws SQLException{
+    /**
+     * This method queries the database and returns a list of all Customers.
+     *
+     * @return Returns ObservableList of type Customer.
+     * @throws SQLException
+     */
+    public static ObservableList<Customer> getCustomerList() throws SQLException{
     JDBC.openConnection();
     try{
         String getCustomerString = SELECT_ALL_COLUMNS + " " + TABLE_CUSTOMERS;
@@ -52,7 +62,14 @@ public static ObservableList<Customer> getCustomerList() throws SQLException{
     return null;
 }
 
-public static Boolean containsCustomerID(Integer customerID) throws SQLException {
+    /**
+     * This method queries the database and determine if customer ID provided as argument is contained within the Customer table.
+     *
+     * @param customerID The customerID to be searched for.
+     * @return Return true if found, false if not found.
+     * @throws SQLException
+     */
+    public static Boolean containsCustomerID(Integer customerID) throws SQLException {
     String stmt = "SELECT customer_id FROM client_schedule.customers ORDER BY customer_id";
     JDBC.openConnection();
     Query.querySQL(stmt);
@@ -68,7 +85,12 @@ public static Boolean containsCustomerID(Integer customerID) throws SQLException
     return false;
 }
 
-public static int findLastCustomerId(){
+    /**
+     * This method queries the database and finds the greatest Customer ID.
+     *
+     * @return Returns an int representing the greatest Customer ID.
+     */
+    public static int findLastCustomerId(){
     JDBC.openConnection();
     try{
         //SELECT * FROM client_schedule.customers ORDER BY Customer_ID DESC LIMIT 1;
@@ -91,7 +113,13 @@ public static int findLastCustomerId(){
     return -1;
 }
 
-public static void insertCustomer(Customer customer) throws SQLException {
+    /**
+     * This method accesses the database and inserts a Customer using information provided in argument.
+     *
+     * @param customer The Customer object to be inserted into the database.
+     * @throws SQLException
+     */
+    public static void insertCustomer(Customer customer) throws SQLException {
     //INSERT INTO customers VALUES(1, 'Daddy Warbucks', '1919 Boardwalk',
     // '01291', '869-908-1875', NOW(), 'script', NOW(), 'script', 29);
     String insertStmt = "INSERT INTO " + TABLE_CUSTOMERS + " VALUES(" +
@@ -105,7 +133,13 @@ public static void insertCustomer(Customer customer) throws SQLException {
     JDBC.closeConnection();
 }
 
-public static void updateCustomer(Customer customer) throws SQLException {
+    /**
+     * This method utilizes the Update statement to update the database with the customer object provided as an argument.
+     *
+     * @param customer The Customer object to be updated.
+     * @throws SQLException
+     */
+    public static void updateCustomer(Customer customer) throws SQLException {
     String updateStmt = "UPDATE " + TABLE_CUSTOMERS + " SET customer_name='" + customer.getName()
             + "', address='" + customer.getAddress() +"', postal_code='" + customer.getPostalCode()
             + "', phone='" + customer.getPhoneNumber() + "', last_update=NOW(), last_updated_by='"
@@ -116,7 +150,13 @@ public static void updateCustomer(Customer customer) throws SQLException {
     JDBC.closeConnection();
 }
 
-public static void deleteCustomer(Customer customer) throws SQLException {
+    /**
+     * This method utilizes the Delete statement to delete the specified Customer from the database.
+     *
+     * @param customer Customer to be deleted.
+     * @throws SQLException
+     */
+    public static void deleteCustomer(Customer customer) throws SQLException {
     String deleteStatement = "DELETE FROM " + TABLE_CUSTOMERS + " WHERE " + COLUMN_ID
             + " = " + customer.getId();
     JDBC.openConnection();

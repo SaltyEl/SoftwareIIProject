@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * This class provides methods for executing SELECT, UPDATE, DELETE and INSERT methods.
+ */
 public class Query {
     private static String query;
     private static Statement stmt;
@@ -32,6 +35,10 @@ public class Query {
         }
     }
 
+    /**
+     *
+     * @return the result.
+     */
     public static ResultSet getResult() {
         return result;
     }

@@ -9,6 +9,11 @@ import java.sql.SQLException;
 import com.c195project.c195project.helpers.Query;
 import com.c195project.c195project.helpers.JDBC;
 
+/**
+ * The Data Access Object Class which manages the CRUD operations between the MySQL server and Java Application for Division.
+ *
+ * @author Blake Ramsey
+ */
 public class DivisionDAO {
 
     public static final String COLUMN_DIVISION_NAME = "division";
@@ -22,6 +27,11 @@ public class DivisionDAO {
 
     public static final String ORDER_BY_DIV_ASC = "ORDER BY division ASC";
 
+    /**
+     * This method queries the database and returns a list of every division.
+     *
+     * @return Returns an ObservableList of type Division.
+     */
     public static ObservableList<Division> getDivisionsList(){
         try{
             JDBC.openConnection();

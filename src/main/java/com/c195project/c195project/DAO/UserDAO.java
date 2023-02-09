@@ -9,6 +9,11 @@ import com.c195project.c195project.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The Data Access Object Class which manages the CRUD operations between the MySQL server and Java Application for User.
+ *
+ * @author Blake Ramsey
+ */
 public class UserDAO {
 
     /**
@@ -44,6 +49,14 @@ public class UserDAO {
      return null;
  }
 
+    /**
+     * This method takes a user ID and queries the database to determine if that user ID exists. If it exists, true is returned.
+     * If it does not exist, false is returned.
+     *
+     * @param userID The user ID to search for.
+     * @return Returns true or false.
+     * @throws SQLException
+     */
     public static Boolean containsUserId(Integer userID) throws SQLException {
         String stmt = "SELECT user_id FROM client_schedule.users ORDER BY user_id";
         JDBC.openConnection();
@@ -60,7 +73,12 @@ public class UserDAO {
         return false;
     }
 
-    public static User getUser(String customerName){
+    /**
+     * This method queries the database using the currentUser String, and returns the User associated with that name.
+     *
+     * @return Returns a User object
+     */
+    public static User getUser(){
         try {
             JDBC.openConnection();
             String sqlStatement = "SELECT * FROM client_schedule.users WHERE User_Name = '"
