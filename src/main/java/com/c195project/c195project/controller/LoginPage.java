@@ -42,9 +42,6 @@ public class LoginPage implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //Need to take out and test with actual computer change in language.
-        /*Locale french = Locale.CANADA_FRENCH;
-        Locale.setDefault(french);*/
 
 
 
