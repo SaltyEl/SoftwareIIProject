@@ -159,15 +159,21 @@ public class HelperFunctions {
         LocalTime end = appointment.getEndDateTime().toLocalTime();
         LocalDate date = appointment.getStartDateTime().toLocalDate();
 
+        System.out.println("ID:" + appointment.getId());
+
         List<Appointment> apptList = AppointmentDAO.getAppointmentList();
+        //THE PROBLEM IS HERE
         List<Appointment> filteredList = apptList.stream()
                 .filter(a -> a.getStartDateTime().toLocalDate().equals(date))
                 .filter(a -> a.getCustomerID() == appointment.getCustomerID())
                 .filter(a -> a.getId() != appointment.getId()).toList();
 
         for(Appointment a : filteredList){
+            System.out.println(a.toString());
             LocalTime compareStart = a.getStartDateTime().toLocalTime();
             LocalTime compareEnd = a.getEndDateTime().toLocalTime();
+            System.out.println("Comparison start: " + compareStart);
+            System.out.println("Comparison end: " + compareEnd);
             boolean startIsDuringAppointment = start.isAfter(compareStart) && start.isBefore(compareEnd);
             boolean endIsDuringAppointment = end.isAfter(compareStart) && end.isBefore(compareEnd);
             boolean apptBetweenStartAndEnd = compareStart.isBefore(end) && compareEnd.isBefore(end)
@@ -175,9 +181,11 @@ public class HelperFunctions {
             boolean startsAreSame = compareStart.equals(start);
             boolean endsAreSame = compareEnd.equals(end);
             if(startIsDuringAppointment || endIsDuringAppointment || apptBetweenStartAndEnd || startsAreSame || endsAreSame){
+                System.out.println("True");
                 return true;
             }
         }
+        System.out.println("False");
         return false;
     }
 

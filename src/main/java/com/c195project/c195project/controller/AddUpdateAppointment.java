@@ -159,9 +159,17 @@ public class AddUpdateAppointment implements Initializable {
         appointment.setType(addTypeTxt.getText());
         appointment.setLocation(addLocationTxt.getText());
 
+        Integer customerID = Integer.valueOf(customerIDTxt.getText());
+        if(!CustomerDAO.containsCustomerID(customerID)){
+            throw new IOException("This customer does not exist");
+        }
+        appointment.setCustomerID(customerID);
+
         ZoneId UTC = ZoneId.of("UTC");
         LocalDateTime startTimeEntered= LocalDateTime.parse(startDateTimeTxt.getText(), dtf);
+        System.out.println("Start time entered: " + startTimeEntered);
         LocalDateTime endTimeEntered = LocalDateTime.parse(endDateTimeTxt.getText(), dtf);
+        System.out.println("End time entered: " + endTimeEntered);
         boolean withinBusinessHours = HelperFunctions.businessIsOpen(startTimeEntered, endTimeEntered);
         if(!withinBusinessHours){
             throw new Exception("This is not within business hours.");
@@ -180,11 +188,6 @@ public class AddUpdateAppointment implements Initializable {
         appointment.setStartDateTime(HelperFunctions.convertLocalTime(startTimeEntered, UTC));
         appointment.setEndDateTime(HelperFunctions.convertLocalTime(endTimeEntered, UTC));
 
-        Integer customerID = Integer.valueOf(customerIDTxt.getText());
-        if(!CustomerDAO.containsCustomerID(customerID)){
-            throw new IOException("This customer does not exist");
-        }
-        appointment.setCustomerID(customerID);
         Integer userID = Integer.valueOf(userIDTxt.getText());
         if(!UserDAO.containsUserId(userID)){
             throw new IOException("This user does not exist");
