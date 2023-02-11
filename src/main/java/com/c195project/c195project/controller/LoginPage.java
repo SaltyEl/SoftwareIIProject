@@ -88,23 +88,33 @@ public class LoginPage implements Initializable {
             if (user != null) {
                 password = passwordTxt.getText();
                 if (password.isEmpty()) {
-                    HelperFunctions.trackUserLoginAttempts(user, false);
+                    HelperFunctions.trackUserLoginAttempts(userName, false);
                     return;
                 }
                 if (password.equals(user.getPassword())){
                     loginButtonClicked = true;
                     currentUser = usernameTxt.getText();
-                    HelperFunctions.trackUserLoginAttempts(user, true);
+                    HelperFunctions.trackUserLoginAttempts(userName, true);
                     HelperFunctions.windowLoader("/com/c195project/c195project/CustomerPage.fxml",
                             LoginPage.class, loginBtn, "Customer",777, 402);
                 }else{
-                    HelperFunctions.trackUserLoginAttempts(user, false);
+                    HelperFunctions.trackUserLoginAttempts(userName, false);
                     if(Locale.getDefault().getLanguage().equals("fr")) {
                         HelperFunctions.showError(convertWordToFrenchCA("Error"),
                                 convertSentenceToFrenchCA("Password is wrong"));
                     }else{
                         HelperFunctions.showError("Error", "Password is incorrect");
                     }
+                }
+            }
+            else{
+                HelperFunctions.trackUserLoginAttempts(userName, false);
+                if(Locale.getDefault().getLanguage().equals("fr")){
+                    HelperFunctions.showError(convertWordToFrenchCA("Error"),
+                            convertSentenceToFrenchCA("Username does not exist"));
+                }
+                else {
+                    HelperFunctions.showError("Error", "Username does not exist");
                 }
             }
         }

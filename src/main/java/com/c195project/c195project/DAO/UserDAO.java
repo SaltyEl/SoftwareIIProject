@@ -37,8 +37,8 @@ public class UserDAO {
              String password = result.getString("Password");
              userResult = new User(userId, userName, password);
              return userResult;
-         } else{
-             //Alerts.showError("User","No matching user found");
+         }else{
+             return null;
          }
      }catch(SQLException e){
          System.out.println("Error: " + e.getMessage());

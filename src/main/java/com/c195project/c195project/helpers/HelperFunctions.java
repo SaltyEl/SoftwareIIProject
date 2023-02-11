@@ -162,7 +162,6 @@ public class HelperFunctions {
         System.out.println("ID:" + appointment.getId());
 
         List<Appointment> apptList = AppointmentDAO.getAppointmentList();
-        //THE PROBLEM IS HERE
         List<Appointment> filteredList = apptList.stream()
                 .filter(a -> a.getStartDateTime().toLocalDate().equals(date))
                 .filter(a -> a.getCustomerID() == appointment.getCustomerID())
@@ -181,11 +180,9 @@ public class HelperFunctions {
             boolean startsAreSame = compareStart.equals(start);
             boolean endsAreSame = compareEnd.equals(end);
             if(startIsDuringAppointment || endIsDuringAppointment || apptBetweenStartAndEnd || startsAreSame || endsAreSame){
-                System.out.println("True");
                 return true;
             }
         }
-        System.out.println("False");
         return false;
     }
 
@@ -193,11 +190,11 @@ public class HelperFunctions {
      * This method is used to update login_activity.txt on user login attempts and whether they were successful or not. This method
      * updates txt file with Username, date, time and success / failure of login attempt.
      *
-     * @param user The User attempting to log in.
+     * @param userName The User attempting to log in.
      * @param loginSuccess The boolean representing success / failure of attempt.
      * @throws IOException
      */
-    public static void trackUserLoginAttempts(User user, boolean loginSuccess) throws IOException {
+    public static void trackUserLoginAttempts(String userName, boolean loginSuccess) throws IOException {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime timeDateUTC = HelperFunctions.convertLocalTime(LocalDateTime.now(), ZoneId.of("UTC"));
@@ -206,7 +203,7 @@ public class HelperFunctions {
 
         //Login Attempt by USERNAME on DATE at TIME - SUCCESS / FAILURE;
         StringBuilder sb = new StringBuilder();
-        sb.append("Login Attempt by '" + user.toString() + "' on " + dateUTC + " at " + timeUTC + " UTC - ");
+        sb.append("Login Attempt by '" + userName + "' on " + dateUTC + " at " + timeUTC + " UTC - ");
         if(loginSuccess){
             sb.append("SUCCESS");
         }
