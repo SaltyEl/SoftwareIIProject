@@ -47,6 +47,7 @@ public class Scheduler implements Initializable {
     public RadioButton showAllRadioButton;
     public TextField monthTextField;
     public TextField typeTextField;
+    public Label andOrLabel;
     private Month thisMonth;
 
     /**
@@ -283,8 +284,9 @@ public class Scheduler implements Initializable {
     }
 
     /**
-     * This method returns a count of total appointments (not filtered by customer) which contain a specified type or fall inside
-     * a specified month. The user enters the month (i.e. Jan / 01 / 1) or the type of appointment in order to filter results.
+     * This method returns a count of total appointments (not filtered by customer) which contain a specified type, fall inside
+     * a specified month or contain a specified type AND fall inside a specified month. The user enters the month (i.e. Jan / 01 / 1)
+     * or the type of appointment in order to filter results.
      *
      * @param actionEvent The actionEvent is the countButton being clicked.
      * @throws SQLException
@@ -293,39 +295,46 @@ public class Scheduler implements Initializable {
         int totalCount = 0;
         String month = monthTextField.getText();
         String type = typeTextField.getText();
-        Month monthFromText = null;
+        Integer monthNumber = null;
+
+
         if(!month.isEmpty()) {
             if (month.matches("^(1[0-2]|[0-9]|0[0-9])$")) {
-                Integer monthNumber = Integer.parseInt(month);
+                monthNumber = Integer.parseInt(month);
                 String monthNumberToString = monthNumber.toString();
                 if (monthNumberToString.startsWith("0")) {
                     String simplifiedNum = monthNumberToString.substring(1);
                     monthNumber = Integer.parseInt(simplifiedNum);
                 }
-                monthFromText = Month.of(monthNumber);
-                totalCount += AppointmentDAO.countAppointmentsByMonth(monthNumber);
             }else{
                 String userInput = month;
-                monthFromText = Month.valueOf(userInput.toUpperCase());
                 Month[] allMonths = Month.values();
                 for (Month m : allMonths) {
                     if (m.toString().equals(userInput.toUpperCase())) {
-                        int monthNum = m.getValue();
-                        totalCount += AppointmentDAO.countAppointmentsByMonth(monthNum);
+                        monthNumber = m.getValue();
                     }
                 }
             }
         }
-        if(!type.isEmpty()) {
-            totalCount += AppointmentDAO.countAppointmentsByType(type);
+
+        if(!type.isEmpty() && !month.isEmpty()) {
+            andOrLabel.setText("AND");
+            totalCount = AppointmentDAO.countAppointmentsByTypeAndMonth(type, monthNumber);
+            countLabel.setText(String.valueOf(totalCount));
         }
-        for(Appointment appointment : AppointmentDAO.getAppointmentList()){
-            Month apptMonth = appointment.getStartDateTime().getMonth();
-            if(appointment.getType().equals(type) && apptMonth.equals(monthFromText)){
-                totalCount -= 1;
-            }
+        else if(!type.isEmpty()){
+            andOrLabel.setText("");
+            totalCount = AppointmentDAO.countAppointmentsByType(type);
+            countLabel.setText(String.valueOf(totalCount));
         }
-        countLabel.setText(String.valueOf(totalCount));
+        else if(!month.isEmpty()){
+            andOrLabel.setText("");
+            totalCount = AppointmentDAO.countAppointmentsByMonth(monthNumber);
+            countLabel.setText(String.valueOf(totalCount));
+        }
+        else{
+            HelperFunctions.showError("Error", "Must enter month, type, or both");
+        }
     }
 
     /**

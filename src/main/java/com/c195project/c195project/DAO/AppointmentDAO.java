@@ -271,4 +271,25 @@ public class AppointmentDAO {
         JDBC.closeConnection();
         return count;
     }
+
+    /**
+     * This method queries the database and returns an int representing the number of appointments by Type AND Month.
+     *
+     * @param userQuery The Type of appointment to be queried in the database.
+     * @param monthNum The month in which appointments should be counted.
+     * @return Returns the number of appointments.
+     * @throws SQLException
+     */
+    public static int countAppointmentsByTypeAndMonth(String userQuery, int monthNum) throws SQLException{
+        String stmt = "SELECT COUNT(*) FROM client_schedule.appointments WHERE type = '" + userQuery
+                + "' AND MONTH(start) = " + monthNum;
+        JDBC.openConnection();
+        Query.querySQL(stmt);
+        ResultSet result = Query.getResult();
+        result.next();
+        int count = result.getInt(1);
+        JDBC.closeConnection();
+        return count;
+    }
+
 }
